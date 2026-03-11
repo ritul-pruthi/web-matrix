@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WebMatrix Solution</title>
+
+    <!-- Google Fonts -->
+    <link
+      rel="preconnect"
+      href="https://fonts.googleapis.com"
+    />
+    <link
+      rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="./style.css" />
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+      /* Layout helpers specific to this page */
+      .page {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 1.5rem 1.5rem 4rem;
+      }
+
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 40;
+      }
+
+      .navbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.9rem 1.4rem;
+        margin-bottom: 2.5rem;
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        font-family: var(--font-heading);
+      }
+
+      .logo-mark {
+        width: 32px;
+        height: 32px;
+        border-radius: 10px;
+        background-image: var(--accent-gradient);
+        box-shadow: 0 0 18px rgba(16, 185, 129, 0.6);
+      }
+
+      .logo-text {
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        background-image: var(--accent-gradient);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+
+      .logo:hover .logo-text {
+        transform: skewX(-2deg);
+        text-shadow: 0 0 10px rgba(14, 165, 233, 0.8),
+          0 0 18px rgba(16, 185, 129, 0.65);
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 1.5rem;
+        font-size: 0.85rem;
+        color: var(--color-text-muted);
+      }
+
+      .nav-links a:hover {
+        color: var(--color-accent-secondary);
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: minmax(0, 3fr) minmax(0, 2.5fr);
+        gap: 3rem;
+        align-items: center;
+        padding: 2.5rem 0 3.5rem;
+      }
+
+      .hero-eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.2rem 0.7rem;
+        border-radius: 999px;
+        border: 1px solid var(--color-border-soft);
+        background: rgba(15, 23, 42, 0.85);
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.14em;
+        color: var(--color-text-muted);
+        margin-bottom: 1.2rem;
+      }
+
+      .hero-title {
+        font-size: clamp(2.4rem, 4vw, 3.2rem);
+        line-height: 1.05;
+        margin-bottom: 1.1rem;
+        background-image: var(--accent-gradient);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+
+      .hero-subtitle {
+        max-width: 32rem;
+        margin-bottom: 1.6rem;
+      }
+
+      .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        align-items: center;
+      }
+
+      .btn-glow {
+        box-shadow: 0 0 25px rgba(16, 185, 129, 0.6),
+          0 0 60px rgba(14, 165, 233, 0.35);
+      }
+
+      .btn-glow:hover {
+        box-shadow: 0 0 32px rgba(16, 185, 129, 0.8),
+          0 0 80px rgba(14, 165, 233, 0.5);
+      }
+
+      .hero-secondary-link {
+        font-size: 0.85rem;
+        color: var(--color-text-muted);
+      }
+
+      .hero-secondary-link span {
+        color: var(--color-accent-secondary);
+      }
+
+      .hero-visual {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        animation: heroFloat 6s ease-in-out infinite;
+      }
+
+      .hero-visual dotlottie-player {
+        width: 100%;
+        max-width: 360px;
+        filter: drop-shadow(0 0 40px rgba(16, 185, 129, 0.85));
+      }
+
+      @keyframes heroFloat {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+
+      .pill {
+        padding: 0.2rem 0.65rem;
+        border-radius: 999px;
+        border: 1px solid rgba(15, 23, 42, 0.95);
+        background: rgba(15, 23, 42, 0.8);
+      }
+
+      .section {
+        padding: 2.5rem 0 0;
+      }
+
+      .section-header {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        align-items: flex-end;
+        margin-bottom: 1.8rem;
+      }
+
+      .section-title {
+        font-size: 1.4rem;
+        margin-bottom: 0.3rem;
+      }
+
+      .section-kicker {
+        font-size: 0.8rem;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--color-text-muted);
+      }
+
+      .services-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1.5rem;
+      }
+
+      .service-icon {
+        width: 38px;
+        height: 38px;
+        border-radius: 12px;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(16, 185, 129, 0.08);
+        border: 1px solid rgba(16, 185, 129, 0.3);
+      }
+
+      .service-title {
+        font-size: 1rem;
+        margin-bottom: 0.4rem;
+      }
+
+      .service-body {
+        font-size: 0.9rem;
+        margin-bottom: 0.9rem;
+      }
+
+      .service-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+        font-size: 0.8rem;
+        color: var(--color-accent-secondary);
+      }
+
+      .service-link span {
+        font-size: 1rem;
+      }
+
+      .card--hover-glow {
+        transition: box-shadow var(--transition-fast),
+          transform var(--transition-fast), border-color var(--transition-fast);
+      }
+
+      .card--hover-glow:hover {
+        box-shadow: 0 18px 45px rgba(16, 185, 129, 0.3);
+        border-color: rgba(16, 185, 129, 0.4);
+        transform: translateY(-3px);
+      }
+
+      .vm-section {
+        margin-top: 3rem;
+        border-radius: 1.5rem;
+        padding: 2rem;
+        background: radial-gradient(
+            circle at 0 0,
+            rgba(16, 185, 129, 0.18),
+            transparent 55%
+          ),
+          radial-gradient(
+            circle at 100% 100%,
+            rgba(14, 165, 233, 0.22),
+            transparent 55%
+          ),
+          rgba(15, 23, 42, 0.96);
+        border: 1px solid rgba(15, 23, 42, 0.9);
+      }
+
+      .vm-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1.6rem;
+      }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+        padding: 0.18rem 0.6rem;
+        border-radius: 999px;
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.16em;
+        background: rgba(15, 23, 42, 0.9);
+      }
+
+      .badge-vision {
+        border: 1px solid rgba(16, 185, 129, 0.7);
+        color: var(--color-accent);
+      }
+
+      .badge-mission {
+        border: 1px solid rgba(14, 165, 233, 0.7);
+        color: var(--color-accent-secondary);
+      }
+
+      .vm-title {
+        font-size: 1.2rem;
+        margin: 0.7rem 0 0.4rem;
+      }
+
+      .vm-body {
+        font-size: 0.9rem;
+      }
+
+      .visuals-section {
+        margin-top: 3rem;
+      }
+
+      .visuals-grid {
+        display: grid;
+        grid-template-columns: 2fr 3fr;
+        gap: 1.5rem;
+      }
+
+      .visual-placeholder {
+        position: relative;
+        border-radius: 1.5rem;
+        padding: 1.5rem;
+        border: 1px dashed rgba(148, 163, 184, 0.5);
+        overflow: hidden;
+        background: radial-gradient(
+            circle at 0 0,
+            rgba(16, 185, 129, 0.25),
+            transparent 55%
+          ),
+          radial-gradient(
+            circle at 100% 100%,
+            rgba(14, 165, 233, 0.3),
+            transparent 55%
+          ),
+          rgba(15, 23, 42, 0.96);
+      }
+
+      .visual-placeholder-label {
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.16em;
+        color: var(--color-text-muted);
+        margin-bottom: 0.9rem;
+      }
+
+      .visual-orb {
+        position: absolute;
+        inset: 20% 35%;
+        border-radius: 999px;
+        background: radial-gradient(
+          circle at 30% 20%,
+          rgba(16, 185, 129, 0.9),
+          rgba(14, 165, 233, 0.6),
+          transparent 65%
+        );
+        filter: blur(12px);
+        animation: glowOrb 18s ease-in-out infinite alternate;
+      }
+
+      .visual-orb::after {
+        content: "";
+        position: absolute;
+        inset: 18%;
+        border-radius: inherit;
+        border: 1px solid rgba(56, 189, 248, 0.35);
+        opacity: 0.8;
+      }
+
+      .visual-mesh {
+        position: relative;
+        height: 160px;
+        border-radius: 1.25rem;
+        overflow: hidden;
+        background: radial-gradient(
+            circle at 10% 10%,
+            rgba(16, 185, 129, 0.7),
+            transparent 60%
+          ),
+          radial-gradient(
+            circle at 90% 80%,
+            rgba(14, 165, 233, 0.8),
+            transparent 60%
+          ),
+          radial-gradient(
+            circle at 50% 0%,
+            rgba(56, 189, 248, 0.4),
+            transparent 55%
+          );
+        opacity: 0.9;
+      }
+
+      .visual-matrix {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 0.45rem;
+        margin-top: 0.8rem;
+      }
+
+      .visual-dot {
+        height: 22px;
+        border-radius: 999px;
+        background: linear-gradient(
+          135deg,
+          rgba(16, 185, 129, 0.7),
+          rgba(14, 165, 233, 0.9)
+        );
+        opacity: 0.7;
+        animation: matrixBlink 2.4s ease-in-out infinite;
+      }
+
+      .visual-dot:nth-child(3n + 1) {
+        animation-delay: 0.2s;
+      }
+
+      .visual-dot:nth-child(3n + 2) {
+        animation-delay: 0.8s;
+      }
+
+      .visual-dot:nth-child(3n) {
+        animation-delay: 1.4s;
+      }
+
+      @keyframes glowOrb {
+        0% {
+          transform: translate3d(-10px, 4px, 0) scale(0.92);
+          opacity: 0.7;
+        }
+        50% {
+          transform: translate3d(8px, -6px, 0) scale(1.02);
+          opacity: 1;
+        }
+        100% {
+          transform: translate3d(14px, 10px, 0) scale(0.96);
+          opacity: 0.8;
+        }
+      }
+
+      @keyframes matrixBlink {
+        0%,
+        10% {
+          opacity: 0.3;
+        }
+        25% {
+          opacity: 1;
+        }
+        40% {
+          opacity: 0.4;
+        }
+        60% {
+          opacity: 0.9;
+        }
+        100% {
+          opacity: 0.3;
+        }
+      }
+
+      .footer {
+        margin-top: 3.2rem;
+        padding-top: 1.8rem;
+        border-top: 1px solid rgba(15, 23, 42, 0.9);
+        font-size: 0.75rem;
+        color: var(--color-text-muted);
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+
+      @media (max-width: 900px) {
+        .hero {
+          grid-template-columns: minmax(0, 1fr);
+        }
+
+        .visuals-grid {
+          grid-template-columns: minmax(0, 1fr);
+        }
+
+        header {
+          position: static;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .services-grid {
+          grid-template-columns: minmax(0, 1fr);
+        }
+      }
+
+      @media (max-width: 640px) {
+        .page {
+          padding-inline: 1.1rem;
+        }
+
+        .navbar {
+          padding-inline: 1rem;
+        }
+
+        .nav-links {
+          display: none;
+        }
+      }
+    </style>
+
+    <script
+      src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs"
+      type="module"
+    ></script>
+  </head>
+  <body>
+    <div class="page">
+      <!-- Header / Navbar -->
+      <header>
+        <div class="glass navbar">
+          <a href="#top" class="logo">
+            <span class="logo-mark" aria-hidden="true"></span>
+            <span class="logo-text">WebMatrix Solution</span>
+          </a>
+
+          <nav class="nav-links">
+            <a href="#services">Services</a>
+            <a href="#vision-mission">Vision &amp; Mission</a>
+            <a href="#visuals">Showcase</a>
+          </nav>
+        </div>
+      </header>
+
+      <!-- Hero -->
+      <main>
+        <section id="top" class="hero">
+          <div>
+            <div class="hero-eyebrow">
+              <span class="text-accent">WebMatrix Solution</span>
+              <span>&bull;</span>
+              <span>Digital-first studio</span>
+            </div>
+
+            <h1 class="hero-title">
+              Transforming Ideas into Digital Success
+            </h1>
+
+            <p class="hero-subtitle">
+              We architect modern web experiences that turn ambitious ideas into
+              scalable, measurable outcomes — from concept and design to
+              high-performance engineering.
+            </p>
+
+            <div class="hero-actions">
+              <a href="#services" class="btn btn-glow">
+                Start Your Journey
+              </a>
+              <a href="#vision-mission" class="hero-secondary-link">
+                See how we think <span>&rarr;</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="hero-visual">
+            <dotlottie-player
+              src="hero-animation.lottie"
+              background="transparent"
+              speed="1"
+              loop
+              autoplay
+            ></dotlottie-player>
+          </div>
+        </section>
+
+        <!-- Services -->
+        <section id="services" class="section">
+          <div class="section-header">
+            <div>
+              <div class="section-kicker">Services</div>
+              <h2 class="section-title">What we build together</h2>
+            </div>
+            <p style="max-width: 18rem">
+              A connected stack of services that move you from raw idea to
+              launched product — and beyond.
+            </p>
+          </div>
+
+          <div class="services-grid">
+            <article class="card card--hover-glow">
+              <div class="service-icon"><i data-lucide="compass"></i></div>
+              <h3 class="service-title">Product Strategy</h3>
+              <p class="service-body">
+                Clarify the opportunity, define the roadmap, and align teams
+                around a digital vision that actually ships.
+              </p>
+              <a href="#" class="service-link">
+                Learn More <span>&rarr;</span>
+              </a>
+            </article>
+
+            <article class="card card--hover-glow">
+              <div class="service-icon"><i data-lucide="palette"></i></div>
+              <h3 class="service-title">Brand &amp; UX Design</h3>
+              <p class="service-body">
+                Craft interfaces that feel effortless — balancing aesthetics,
+                accessibility, and conversion.
+              </p>
+              <a href="#" class="service-link">
+                Learn More <span>&rarr;</span>
+              </a>
+            </article>
+
+            <article class="card card--hover-glow">
+              <div class="service-icon"><i data-lucide="code"></i></div>
+              <h3 class="service-title">Full-Stack Development</h3>
+              <p class="service-body">
+                Robust, scalable web platforms built with modern tooling, clean
+                architecture, and performance-first thinking.
+              </p>
+              <a href="#" class="service-link">
+                Learn More <span>&rarr;</span>
+              </a>
+            </article>
+
+            <article class="card card--hover-glow">
+              <div class="service-icon"><i data-lucide="shopping-cart"></i></div>
+              <h3 class="service-title">E‑Commerce Experiences</h3>
+              <p class="service-body">
+                High-converting storefronts, custom flows, and integrations that
+                turn visitors into loyal customers.
+              </p>
+              <a href="#" class="service-link">
+                Learn More <span>&rarr;</span>
+              </a>
+            </article>
+
+            <article class="card card--hover-glow">
+              <div class="service-icon"><i data-lucide="monitor"></i></div>
+              <h3 class="service-title">Web Applications</h3>
+              <p class="service-body">
+                Data-rich dashboards and internal tools that give your team
+                superpowers instead of friction.
+              </p>
+              <a href="#" class="service-link">
+                Learn More <span>&rarr;</span>
+              </a>
+            </article>
+
+            <article class="card card--hover-glow">
+              <div class="service-icon"><i data-lucide="settings"></i></div>
+              <h3 class="service-title">Ongoing Optimization</h3>
+              <p class="service-body">
+                Continuous improvements to speed, UX, and conversions so your
+                product never falls behind.
+              </p>
+              <a href="#" class="service-link">
+                Learn More <span>&rarr;</span>
+              </a>
+            </article>
+          </div>
+        </section>
+
+        <!-- Vision & Mission -->
+        <section id="vision-mission" class="section">
+          <div class="vm-section">
+            <div class="section-kicker">Why WebMatrix exists</div>
+            <div class="vm-grid">
+              <div>
+                <span class="badge badge-vision">Vision</span>
+                <h3 class="vm-title">
+                  A web where every idea can scale.
+                </h3>
+                <p class="vm-body">
+                  We imagine a digital landscape where thoughtful products of
+                  any size can compete — powered by reliable technology, clear
+                  strategy, and human-centered design.
+                </p>
+              </div>
+
+              <div>
+                <span class="badge badge-mission">Mission</span>
+                <h3 class="vm-title">
+                  Turn complexity into clear, usable systems.
+                </h3>
+                <p class="vm-body">
+                  Our mission is to translate your business goals into
+                  high-performing web experiences, connecting data, design, and
+                  engineering into one coherent matrix.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Visuals / Abstract Illustrations -->
+        <section id="visuals" class="section visuals-section">
+          <div class="section-header">
+            <div>
+              <div class="section-kicker">Visual language</div>
+              <h2 class="section-title">Abstract tech placeholders</h2>
+            </div>
+            <p style="max-width: 18rem">
+              Swap these with your own 3D renders, gradients, or illustrations
+              — they’re wired to your emerald and cyan palette.
+            </p>
+          </div>
+
+          <div class="visuals-grid">
+            <div class="visual-placeholder">
+              <div class="visual-placeholder-label">
+                Emerald Glow Orb
+              </div>
+              <div class="visual-mesh"></div>
+              <div class="visual-orb"></div>
+            </div>
+
+            <div class="visual-placeholder">
+              <div class="visual-placeholder-label">
+                Matrix Data Stream
+              </div>
+              <div class="visual-mesh"></div>
+              <div class="visual-matrix">
+                <div class="visual-dot"></div>
+                <div class="visual-dot"></div>
+                <div class="visual-dot"></div>
+                <div class="visual-dot"></div>
+                <div class="visual-dot"></div>
+                <div class="visual-dot"></div>
+                <div class="visual-dot"></div>
+                <div class="visual-dot"></div>
+                <div class="visual-dot"></div>
+                <div class="visual-dot"></div>
+                <div class="visual-dot"></div>
+                <div class="visual-dot"></div>
+                <div class="visual-dot"></div>
+                <div class="visual-dot"></div>
+                <div class="visual-dot"></div>
+                <div class="visual-dot"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <!-- Footer -->
+      <footer class="footer">
+        <span>&copy; <span id="year"></span> WebMatrix Solution.</span>
+        <span>Crafted with the Aesthetic Tech system.</span>
+      </footer>
+    </div>
+
+    <script>
+      // Simple current year in footer
+      document.getElementById("year").textContent =
+        new Date().getFullYear().toString();
+    </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+  </body>
+</html>
+

@@ -271,3 +271,12 @@ dotlottie-player {
   height: 24px;
   stroke-width: 2;
 }
+
+/* Company logo */
+.logo-img {
+  height: 38px;
+  width: auto;
+  display: block;
+  border-radius: 8px;
+  filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.4));
+}

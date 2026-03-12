@@ -13,14 +13,16 @@ document.addEventListener('DOMContentLoaded', function () {
     hamburger.addEventListener('click', toggleMobileNav);
   }
 
-  // 2. Initialize Icons with fallback
+  // 2. Initialize Icons: run immediately + fallback so icons render in service cards
   if (window.lucide && typeof lucide.createIcons === 'function') {
     lucide.createIcons();
     setTimeout(lucide.createIcons, 100);
   }
 
-  // 3. Scroll Reveal Logic
-  const revealElements = document.querySelectorAll('.card, .vm-section');
+  // 3. Scroll Reveal Logic (cards, vm-section, contact section)
+  const revealElements = document.querySelectorAll(
+    '.card, .vm-section, .contact-form-container'
+  );
 
   const revealObserver = new IntersectionObserver(
     (entries) => {
@@ -51,4 +53,16 @@ document.addEventListener('DOMContentLoaded', function () {
       nav.style.borderColor = 'rgba(255, 255, 255, 0.1)';
     }
   });
+
+  // 5. Contact form: on submit hide form and show success message
+  const contactForm = document.getElementById('contact-form');
+  const contactContainer = document.querySelector('.contact-form-container');
+  const contactSuccess = document.getElementById('contact-success');
+  if (contactForm && contactContainer && contactSuccess) {
+    contactForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      contactContainer.classList.add('form-sent');
+      contactSuccess.hidden = false;
+    });
+  }
 });

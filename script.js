@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // 3. Scroll Reveal Logic (cards, vm-section, contact section, headers)
   const revealElements = document.querySelectorAll(
-    '.section > *, .card, .vm-section, .contact-form-container, .project-starter-box, .services-cta'
+    '.section > *, .card, .core-value-card, .vm-section, .contact-form-container, .project-starter-box, .services-cta'
   );
 
   const revealObserver = new IntersectionObserver(

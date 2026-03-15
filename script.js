@@ -229,4 +229,33 @@ document.addEventListener('DOMContentLoaded', function () {
     animateParticles();
   }
 
+  // 9. Reviews Overlay Logic
+  const navReviewsLink = document.getElementById('nav-reviews');
+  const reviewsOverlay = document.getElementById('reviews-page');
+  const closeReviewsBtn = document.getElementById('close-reviews');
+
+  if (navReviewsLink && reviewsOverlay && closeReviewsBtn) {
+    navReviewsLink.addEventListener('click', (e) => {
+      e.preventDefault(); // Prevent default anchor scrolling
+      reviewsOverlay.classList.add('active');
+      document.body.classList.add('no-scroll');
+      
+      // If mobile nav is open, close it
+      const nav = document.querySelector('nav, .navbar');
+      if (nav && nav.classList.contains('mobile-open')) {
+        nav.classList.remove('mobile-open');
+      }
+
+      // Re-trigger icon rendering for the overlay dynamically just in case
+      if (window.lucide && typeof lucide.createIcons === 'function') {
+        lucide.createIcons();
+      }
+    });
+
+    closeReviewsBtn.addEventListener('click', () => {
+      reviewsOverlay.classList.remove('active');
+      document.body.classList.remove('no-scroll');
+    });
+  }
+
 });

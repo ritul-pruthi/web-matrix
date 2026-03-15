@@ -440,6 +440,7 @@
           <a href="#about">About Us</a>
           <a href="#location">Location</a>
           <a href="#contact">Contact</a>
+          <a href="#" id="nav-reviews">Reviews</a>
         </nav>
       </div>
     </header>
@@ -725,6 +726,112 @@
   </script>
   <script src="https://unpkg.com/lucide@latest"></script>
   <script src="./script.js"></script>
-</body>
 
+  <!-- Reviews Overlay -->
+  <div id="reviews-page" class="reviews-overlay custom-scrollbar">
+    <div class="reviews-header">
+      <button id="close-reviews" class="btn btn--outline" style="padding: 0.5rem 1rem; font-size: 0.8rem;">
+        <i data-lucide="arrow-left" style="width: 16px; height: 16px;"></i>
+        Back to Home
+      </button>
+      <h2 class="hero-title" style="margin-bottom: 0; font-size: clamp(2rem, 3vw, 2.5rem);">Client Reviews</h2>
+      <div style="width: 100px;"></div> <!-- Spacer for flex alignment -->
+    </div>
+    
+    <div class="reviews-container">
+      <div class="services-grid reviews-grid">
+        <!-- Review 1 -->
+        <article class="card card--hover-glow review-card">
+          <div class="review-header">
+            <h3 class="service-title" style="color: var(--color-text-primary); margin-bottom: 0;">Aryan Malhotra</h3>
+            <div class="review-stars">
+              <i data-lucide="star" style="width: 16px; fill: var(--color-accent); color: var(--color-accent);"></i>
+              <i data-lucide="star" style="width: 16px; fill: var(--color-accent); color: var(--color-accent);"></i>
+              <i data-lucide="star" style="width: 16px; fill: var(--color-accent); color: var(--color-accent);"></i>
+              <i data-lucide="star" style="width: 16px; fill: var(--color-accent); color: var(--color-accent);"></i>
+              <i data-lucide="star" style="width: 16px; fill: var(--color-accent); color: var(--color-accent);"></i>
+            </div>
+          </div>
+          <p class="service-body">"The 'Unified Matrix' approach is real. They streamlined our entire workflow by building a custom dashboard that feels like it's from the future. Peak engineering."</p>
+        </article>
+
+        <!-- Review 2 -->
+        <article class="card card--hover-glow review-card">
+          <div class="review-header">
+            <h3 class="service-title" style="color: var(--color-text-primary); margin-bottom: 0;">Jessica Chen</h3>
+            <div class="review-stars">
+              <i data-lucide="star" style="width: 16px; fill: var(--color-accent); color: var(--color-accent);"></i>
+              <i data-lucide="star" style="width: 16px; fill: var(--color-accent); color: var(--color-accent);"></i>
+              <i data-lucide="star" style="width: 16px; fill: var(--color-accent); color: var(--color-accent);"></i>
+              <i data-lucide="star" style="width: 16px; fill: var(--color-accent); color: var(--color-accent);"></i>
+              <i data-lucide="star" style="width: 16px; fill: var(--color-accent); color: var(--color-accent);"></i>
+            </div>
+          </div>
+          <p class="service-body">"Founding a startup is chaotic, but WebMatrix brought the order we needed. Their technical pillars for scalability saved us months of refactoring. Simply the best."</p>
+        </article>
+
+        <!-- Review 3 -->
+        <article class="card card--hover-glow review-card">
+          <div class="review-header">
+            <h3 class="service-title" style="color: var(--color-text-primary); margin-bottom: 0;">Rohan Varma</h3>
+            <div class="review-stars">
+              <i data-lucide="star" style="width: 16px; fill: var(--color-accent); color: var(--color-accent);"></i>
+              <i data-lucide="star" style="width: 16px; fill: var(--color-accent); color: var(--color-accent);"></i>
+              <i data-lucide="star" style="width: 16px; fill: var(--color-accent); color: var(--color-accent);"></i>
+              <i data-lucide="star" style="width: 16px; fill: var(--color-accent); color: var(--color-accent);"></i>
+              <i data-lucide="star-half" style="width: 16px; color: var(--color-accent);"></i>
+            </div>
+          </div>
+          <p class="service-body">"Clean code, high performance, and an aesthetic that is unmatched. The glassmorphism UI they built for our internal tools made our team 2x more productive."</p>
+        </article>
+
+        <!-- Review 4 -->
+        <article class="card card--hover-glow review-card">
+          <div class="review-header">
+            <h3 class="service-title" style="color: var(--color-text-primary); margin-bottom: 0;">David Miller</h3>
+            <div class="review-stars">
+              <i data-lucide="star" style="width: 16px; fill: var(--color-accent); color: var(--color-accent);"></i>
+              <i data-lucide="star" style="width: 16px; fill: var(--color-accent); color: var(--color-accent);"></i>
+              <i data-lucide="star" style="width: 16px; fill: var(--color-accent); color: var(--color-accent);"></i>
+              <i data-lucide="star" style="width: 16px; fill: var(--color-accent); color: var(--color-accent);"></i>
+              <i data-lucide="star" style="width: 16px; fill: var(--color-accent); color: var(--color-accent);"></i>
+            </div>
+          </div>
+          <p class="service-body">"Security was our biggest concern, but their 'Obsidian Logic' approach hardened our platform against everything. They don't just build sites; they build digital fortresses."</p>
+        </article>
+
+        <!-- Review 5 -->
+        <article class="card card--hover-glow review-card">
+          <div class="review-header">
+            <h3 class="service-title" style="color: var(--color-text-primary); margin-bottom: 0;">Ishaan Singh</h3>
+            <div class="review-stars">
+              <i data-lucide="star" style="width: 16px; fill: var(--color-accent); color: var(--color-accent);"></i>
+              <i data-lucide="star" style="width: 16px; fill: var(--color-accent); color: var(--color-accent);"></i>
+              <i data-lucide="star" style="width: 16px; fill: var(--color-accent); color: var(--color-accent);"></i>
+              <i data-lucide="star" style="width: 16px; fill: var(--color-accent); color: var(--color-accent);"></i>
+              <i data-lucide="star" style="width: 16px; fill: var(--color-accent); color: var(--color-accent);"></i>
+            </div>
+          </div>
+          <p class="service-body">"WebMatrix didn't just meet the requirements—they evolved them. Their recursive innovation ensures our product stays ahead of the curve."</p>
+        </article>
+
+        <!-- Review 6 -->
+        <article class="card card--hover-glow review-card">
+          <div class="review-header">
+            <h3 class="service-title" style="color: var(--color-text-primary); margin-bottom: 0;">Rhea Kapoor</h3>
+            <div class="review-stars">
+              <i data-lucide="star" style="width: 16px; fill: var(--color-accent); color: var(--color-accent);"></i>
+              <i data-lucide="star" style="width: 16px; fill: var(--color-accent); color: var(--color-accent);"></i>
+              <i data-lucide="star" style="width: 16px; fill: var(--color-accent); color: var(--color-accent);"></i>
+              <i data-lucide="star" style="width: 16px; fill: var(--color-accent); color: var(--color-accent);"></i>
+              <i data-lucide="star" style="width: 16px; fill: transparent; color: var(--color-accent);"></i>
+            </div>
+          </div>
+          <p class="service-body">"Transitioning our legacy systems to a modern web application was a massive undertaking until we partnered with WebMatrix."</p>
+        </article>
+
+      </div>
+    </div>
+  </div>
+</body>
 </html>

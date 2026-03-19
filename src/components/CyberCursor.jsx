@@ -5,6 +5,7 @@ export default function CyberCursor() {
   const ringRef = useRef(null);
   const mouse = useRef({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
   const ring = useRef({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
+  const magneticBtnsRef = useRef([]);
 
   const handleMouseMove = useCallback((e) => {
     mouse.current.x = e.clientX;
@@ -14,10 +15,40 @@ export default function CyberCursor() {
       dotRef.current.style.left = `${e.clientX}px`;
       dotRef.current.style.top = `${e.clientY}px`;
     }
+
+    if (magneticBtnsRef.current && magneticBtnsRef.current.length > 0) {
+      magneticBtnsRef.current.forEach(btn => {
+        const rect = btn.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        const distanceX = e.clientX - centerX;
+        const distanceY = e.clientY - centerY;
+        const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+
+        const radius = Math.max(rect.width, rect.height) / 2 + 50;
+
+        if (distance < radius) {
+          const pullX = distanceX * 0.25;
+          const pullY = distanceY * 0.25;
+          btn.style.transform = `translate(${pullX}px, ${pullY}px)`;
+        } else {
+          btn.style.transform = '';
+        }
+      });
+    }
   }, []);
 
   useEffect(() => {
     let animationId;
+
+    const updateMagneticBtns = () => {
+      magneticBtnsRef.current = Array.from(document.querySelectorAll('.btn, .btn-glow, .btn-large'));
+    };
+    
+    updateMagneticBtns();
+    
+    const observer = new MutationObserver(updateMagneticBtns);
+    observer.observe(document.body, { childList: true, subtree: true });
 
     function animateRing() {
       ring.current.x += (mouse.current.x - ring.current.x) * 0.15;
@@ -55,6 +86,7 @@ export default function CyberCursor() {
       window.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseover', onMouseOver);
       document.removeEventListener('mouseout', onMouseOut);
+      observer.disconnect();
     };
   }, [handleMouseMove]);
 

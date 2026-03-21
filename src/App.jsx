@@ -1,47 +1,55 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { supabase } from './supabase-client';
 
-import ScrollProgress from './components/ScrollProgress';
-import ParticleCanvas from './components/ParticleCanvas';
-import CyberCursor from './components/CyberCursor';
-import Navbar from './components/Navbar';
-import Hero from './components/Hero';
-import Services from './components/Services';
-import About from './components/About';
-import Location from './components/Location';
-import Contact from './components/Contact';
-import Footer from './components/Footer';
-import ReviewsOverlay from './components/ReviewsOverlay';
+import LandingPage from './pages/LandingPage';
+import Auth from './components/Auth';
+import AdminDashboard from './components/AdminDashboard';
+import ProtectedRoute from './components/ProtectedRoute';
 
 export default function App() {
-  const [showReviews, setShowReviews] = useState(false);
+  const [session, setSession] = useState(null);
+
+  useEffect(() => {
+    // Initial fetch of session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+    });
+
+    // Set up global auth listener
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        setSession(session);
+      }
+    );
+
+    return () => {
+      authListener.subscription.unsubscribe();
+    };
+  }, []);
 
   return (
-    <>
-      {/* Fixed-layer UI */}
-      <ScrollProgress />
-      <ParticleCanvas />
-      <CyberCursor />
-
-      {/* Page content */}
-      <div className="page">
-        <Navbar onShowReviews={() => setShowReviews(true)} />
-
-        <main>
-          <Hero />
-          <Services />
-          <About />
-          <Location />
-          <Contact />
-        </main>
-
-        <Footer />
-      </div>
-
-      {/* Overlay */}
-      <ReviewsOverlay
-        isOpen={showReviews}
-        onClose={() => setShowReviews(false)}
-      />
-    </>
+    <Router>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        
+        <Route 
+          path="/login" 
+          element={<Auth />} 
+        />
+        
+        <Route 
+          path="/admin" 
+          element={
+            <ProtectedRoute>
+              <AdminDashboard />
+            </ProtectedRoute>
+          } 
+        />
+        
+        {/* Catch-all route redirects to home */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </Router>
   );
 }

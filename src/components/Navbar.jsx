@@ -1,10 +1,14 @@
 import { useState, useEffect } from 'react';
 import { Menu } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { supabase } from '../supabase-client';
 import logoImg from '../assets/logo.jpeg';
 
 export default function Navbar({ onShowReviews }) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [session, setSession] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -12,10 +16,23 @@ export default function Navbar({ onShowReviews }) {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => setSession(data.session));
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      (event, session) => setSession(session)
+    );
+    return () => authListener.subscription.unsubscribe();
+  }, []);
+
   const handleReviewsClick = (e) => {
     e.preventDefault();
     setMobileOpen(false);
     onShowReviews();
+  };
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    navigate('/');
   };
 
   return (
@@ -34,13 +51,73 @@ export default function Navbar({ onShowReviews }) {
           <a href="#" onClick={handleReviewsClick}>Reviews</a>
         </nav>
 
-        <button
-          className="hamburger"
-          onClick={() => setMobileOpen(!mobileOpen)}
-          aria-label="Toggle navigation"
-        >
-          <Menu size={24} />
-        </button>
+        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+          {!session ? (
+            <button 
+              onClick={() => navigate('/login')}
+              className="btn-glow"
+              style={{
+                fontFamily: 'var(--font-heading)',
+                padding: '0.4rem 1rem',
+                borderRadius: '2rem',
+                border: 'none',
+                background: 'var(--accent-gradient)',
+                color: 'var(--color-bg)',
+                fontWeight: 'bold',
+                cursor: 'pointer',
+                fontSize: '0.85rem'
+              }}
+            >
+              Sign In
+            </button>
+          ) : (
+            <>
+              <button 
+                onClick={() => navigate('/admin')}
+                className="btn-glow"
+                style={{
+                  fontFamily: 'var(--font-heading)',
+                  padding: '0.4rem 1rem',
+                  borderRadius: '2rem',
+                  border: '1px solid var(--color-accent)',
+                  background: 'transparent',
+                  color: 'var(--color-accent)',
+                  fontWeight: 'bold',
+                  cursor: 'pointer',
+                  fontSize: '0.85rem'
+                }}
+              >
+                Dashboard
+              </button>
+              <button 
+                onClick={handleSignOut}
+                className="btn-glow"
+                style={{
+                  fontFamily: 'var(--font-heading)',
+                  padding: '0.4rem 1rem',
+                  borderRadius: '2rem',
+                  border: 'none',
+                  background: 'var(--accent-gradient)',
+                  color: 'var(--color-bg)',
+                  fontWeight: 'bold',
+                  cursor: 'pointer',
+                  fontSize: '0.85rem'
+                }}
+              >
+                Sign Out
+              </button>
+            </>
+          )}
+
+          <button
+            className="hamburger"
+            onClick={() => setMobileOpen(!mobileOpen)}
+            aria-label="Toggle navigation"
+            style={{ marginLeft: '0.5rem' }}
+          >
+            <Menu size={24} />
+          </button>
+        </div>
       </div>
     </header>
   );

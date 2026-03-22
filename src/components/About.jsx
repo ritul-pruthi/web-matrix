@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { LayoutGrid, Repeat, Terminal, Share2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 

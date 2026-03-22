@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { Compass, Palette, Code, ShoppingCart, Monitor, Settings } from 'lucide-react';
 import { motion } from 'framer-motion';
 

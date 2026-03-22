@@ -41,6 +41,13 @@ export default function CyberCursor() {
   useEffect(() => {
     let animationId;
 
+    const isTouchDevice = window.matchMedia('(pointer: coarse)').matches;
+    if (isTouchDevice) {
+      if (dotRef.current) dotRef.current.style.display = 'none';
+      if (ringRef.current) ringRef.current.style.display = 'none';
+      return;
+    }
+
     const updateMagneticBtns = () => {
       magneticBtnsRef.current = Array.from(document.querySelectorAll('.btn, .btn-glow, .btn-large'));
     };

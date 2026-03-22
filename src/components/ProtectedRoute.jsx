@@ -1,59 +1,10 @@
-import { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
-import { supabase } from '../supabase-client';
+import { useAuth } from '../context/AuthContext';
 
 export default function ProtectedRoute({ children }) {
-  const [isVerifying, setIsVerifying] = useState(true);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
+  const { user, isAdmin, signOut } = useAuth();
 
-  useEffect(() => {
-    const checkUser = async () => {
-      try {
-        const { data: { user }, error } = await supabase.auth.getUser();
-        
-        if (user && !error) {
-          setIsAuthenticated(true);
-          
-          // Fallback to a default string if the environment variable is not defined
-          const adminEmail = import.meta.env.VITE_ADMIN_EMAIL || 'admin@webmatrix.com';
-          if (user.email === adminEmail) {
-            setIsAdmin(true);
-          } else {
-            setIsAdmin(false);
-          }
-        } else {
-          setIsAuthenticated(false);
-          setIsAdmin(false);
-        }
-      } catch (err) {
-        setIsAuthenticated(false);
-        setIsAdmin(false);
-      } finally {
-        setIsVerifying(false);
-      }
-    };
-
-    checkUser();
-  }, []);
-
-  if (isVerifying) {
-    return (
-      <div style={{ 
-        minHeight: '100vh', 
-        display: 'flex', 
-        alignItems: 'center', 
-        justifyContent: 'center', 
-        backgroundColor: 'var(--color-bg)', 
-        color: 'var(--color-accent)',
-        fontFamily: 'var(--font-heading)'
-      }}>
-        Verifying secure access...
-      </div>
-    );
-  }
-
-  if (!isAuthenticated) {
+  if (!user) {
     return <Navigate to="/login" replace />;
   }
 
@@ -75,7 +26,7 @@ export default function ProtectedRoute({ children }) {
           <p style={{ color: 'rgba(255,255,255,0.8)', marginBottom: '2rem' }}>You do not have administrator privileges to view this page.</p>
           <button 
             className="btn-glow" 
-            onClick={() => supabase.auth.signOut()} 
+            onClick={signOut} 
             style={{ 
               padding: '0.75rem 1.5rem', 
               borderRadius: '0.5rem', 

@@ -1,11 +1,14 @@
+/* eslint-disable no-unused-vars */
 import { Mail, Phone, MapPin, MessageSquare, Check, Send } from 'lucide-react';
 import { motion } from 'framer-motion';
+
+import { config } from '../config';
 
 const CONTACT_INFO = [
   {
     icon: Mail,
     title: 'Email Us',
-    desc: 'swebmatrix@gmail.com',
+    desc: config.contact.email,
     sub: 'Send us an email anytime',
   },
   {
@@ -13,15 +16,15 @@ const CONTACT_INFO = [
     title: 'Call Us',
     desc: (
       <>
-        +91 9999792830 <br /> +91 8447418323
+        {config.contact.phones[0]} <br /> {config.contact.phones[1]}
       </>
     ),
-    sub: 'Mon-Sat, 9am-6pm IST',
+    sub: config.contact.hours,
   },
   {
     icon: MapPin,
     title: 'Visit Us',
-    desc: 'Noida, Delhi NCR',
+    desc: config.contact.address,
     sub: 'Schedule an in-person meeting',
   },
 ];

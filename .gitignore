@@ -16,3 +16,13 @@ dist-ssr/
 
 # Environment Variables
 .env
+.env*.local
+
+# Build and Cache
+.eslintcache
+.vite/
+
+# Yarn / pnpm
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*

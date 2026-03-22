@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { motion } from 'framer-motion';
 import heroAnimation from '../assets/hero-animation.lottie';

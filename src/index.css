@@ -694,8 +694,10 @@ header {
 }
 
 /* ── Custom Cursor ── */
-body, a, button, .btn, .card {
-  cursor: none !important;
+@media (pointer: fine) {
+  body, a, button, .btn, .card {
+    cursor: none !important;
+  }
 }
 
 .cursor-dot {

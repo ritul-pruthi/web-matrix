@@ -1,27 +1,19 @@
 import { useState, useEffect } from 'react';
 import { Menu } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { supabase } from '../supabase-client';
+import { useAuth } from '../context/AuthContext';
 import logoImg from '../assets/logo.jpeg';
 
 export default function Navbar({ onShowReviews }) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [session, setSession] = useState(null);
+  const { user: session, signOut } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => setSession(data.session));
-    const { data: authListener } = supabase.auth.onAuthStateChange(
-      (event, session) => setSession(session)
-    );
-    return () => authListener.subscription.unsubscribe();
   }, []);
 
   const handleReviewsClick = (e) => {
@@ -31,13 +23,13 @@ export default function Navbar({ onShowReviews }) {
   };
 
   const handleSignOut = async () => {
-    await supabase.auth.signOut();
+    await signOut();
     navigate('/');
   };
 
   return (
     <header>
-      <div className={`glass navbar${scrolled ? ' scrolled' : ''}`}>
+      <div className={`glass navbar${scrolled ? ' scrolled' : ''}${mobileOpen ? ' mobile-open' : ''}`}>
         <a href="#top" className="logo">
           <img src={logoImg} alt="WebMatrix Solution" className="logo-img" />
         </a>

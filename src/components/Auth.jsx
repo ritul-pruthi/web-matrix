@@ -1,27 +1,32 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../supabase-client';
+import { useAuth } from '../context/AuthContext';
 
 export default function Auth() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [isAuthenticating, setIsAuthenticating] = useState(false);
   const navigate = useNavigate();
+  const { user, isAdmin, loading, signOut } = useAuth();
 
+  // Smart redirect logic based entirely on global context
   useEffect(() => {
-    const checkSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session) {
+    if (!loading && user) {
+      if (isAdmin) {
         navigate('/admin');
+      } else {
+        alert('You do not have administrative portal access. Returning to home page.');
+        signOut();
+        navigate('/');
       }
-    };
-    checkSession();
-  }, [navigate]);
+    }
+  }, [user, isAdmin, loading, navigate, signOut]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setLoading(true);
+    setIsAuthenticating(true);
     setError(null);
 
     const { error: signInError } = await supabase.auth.signInWithPassword({
@@ -31,10 +36,10 @@ export default function Auth() {
 
     if (signInError) {
       setError(signInError.message);
-      setLoading(false);
-    } else {
-      navigate('/admin');
+      setIsAuthenticating(false);
     }
+    
+    // Success flow natively delegates to useEffect tracking the user login state
   };
 
   return (
@@ -129,15 +134,15 @@ export default function Auth() {
         <button 
           type="submit" 
           className="btn-glow" 
-          disabled={loading}
+          disabled={isAuthenticating || loading}
           style={{
             marginTop: '1rem',
             padding: '0.75rem',
             borderRadius: '0.5rem',
             border: 'none',
             fontFamily: 'var(--font-heading)',
-            cursor: loading ? 'not-allowed' : 'pointer',
-            opacity: loading ? 0.7 : 1,
+            cursor: (isAuthenticating || loading) ? 'not-allowed' : 'pointer',
+            opacity: (isAuthenticating || loading) ? 0.7 : 1,
             backgroundColor: 'var(--color-accent)',
             color: 'var(--color-bg)',
             fontWeight: 'bold',
@@ -145,7 +150,7 @@ export default function Auth() {
             transition: 'all 0.3s ease'
           }}
         >
-          {loading ? 'Authenticating...' : 'Sign In'}
+          {isAuthenticating ? 'Authenticating...' : 'Sign In'}
         </button>
       </form>
     </div>

@@ -32,16 +32,31 @@ function SplashScreen() {
 export function AuthProvider({ children }) {
   const [session, setSession] = useState(null);
   const [user, setUser] = useState(null);
+  const [profile, setProfile] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  const checkAdmin = (currentUser) => {
+  const fetchProfile = async (currentUser) => {
     if (!currentUser) {
+      setProfile(null);
       setIsAdmin(false);
       return;
     }
-    const isRoleAdmin = currentUser.app_metadata?.role === 'admin';
-    setIsAdmin(isRoleAdmin);
+    const { data: profileData, error } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', currentUser.id)
+      .single();
+
+    if (error) {
+      console.error('Error fetching profile:', error);
+      setProfile(null);
+      setIsAdmin(false);
+      return;
+    }
+
+    setProfile(profileData);
+    setIsAdmin(profileData?.role === 'admin');
   };
 
   useEffect(() => {
@@ -49,8 +64,11 @@ export function AuthProvider({ children }) {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
-      checkAdmin(session?.user);
-      setLoading(false);
+      if (session?.user) {
+        fetchProfile(session.user).finally(() => setLoading(false));
+      } else {
+        setLoading(false);
+      }
     });
 
     // Listen for auth state changes
@@ -59,8 +77,13 @@ export function AuthProvider({ children }) {
     } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
       setUser(session?.user ?? null);
-      checkAdmin(session?.user);
-      setLoading(false);
+      if (session?.user) {
+        setLoading(true);
+        fetchProfile(session.user).finally(() => setLoading(false));
+      } else {
+        fetchProfile(null);
+        setLoading(false);
+      }
     });
 
     return () => subscription.unsubscribe();
@@ -73,6 +96,7 @@ export function AuthProvider({ children }) {
   const value = {
     session,
     user,
+    profile,
     isAdmin,
     loading,
     signOut,

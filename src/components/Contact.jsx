@@ -95,7 +95,7 @@ export default function Contact() {
             style={{ width: '100%', justifyContent: 'center', backgroundColor: 'rgba(6, 182, 212, 0.1)', border: '1px solid #06b6d4', color: '#06b6d4', boxShadow: '0 0 20px rgba(6, 182, 212, 0.4)' }}
           >
             <Send style={{ width: 18, height: 18, marginRight: 8 }} />
-            Fill Your Ink / Send Enquiry
+            Fill Your Inquiry / Send Enquiry
           </button>
         </div>
       </div>

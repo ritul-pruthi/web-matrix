@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "@lottiefiles/dotlottie-react": "^0.18.7",
+    "@supabase/auth-ui-react": "^0.4.7",
+    "@supabase/auth-ui-shared": "^0.1.8",
     "@supabase/supabase-js": "^2.99.3",
     "framer-motion": "^12.38.0",
     "lucide-react": "^0.577.0",

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars, react-hooks/set-state-in-effect */
 import { useEffect, useState } from 'react';
 import { Star, StarHalf, ArrowLeft, Edit3 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -34,18 +35,7 @@ export default function ReviewsOverlay({ isOpen, onClose }) {
 
   const { user, profile } = useAuth();
 
-  useEffect(() => {
-    if (isOpen) {
-      document.body.classList.add('no-scroll');
-      fetchReviews();
-    } else {
-      document.body.classList.remove('no-scroll');
-      setIsWriting(false);
-    }
-    return () => document.body.classList.remove('no-scroll');
-  }, [isOpen]);
-
-  const fetchReviews = async () => {
+  async function fetchReviews() {
     setLoading(true);
     const { data, error } = await supabase
       .from('reviews')
@@ -58,7 +48,18 @@ export default function ReviewsOverlay({ isOpen, onClose }) {
       setReviewsData(data);
     }
     setLoading(false);
-  };
+  }
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.classList.add('no-scroll');
+      fetchReviews();
+    } else {
+      document.body.classList.remove('no-scroll');
+      setIsWriting(false);
+    }
+    return () => document.body.classList.remove('no-scroll');
+  }, [isOpen]);
 
   const handleReviewSubmit = async (e) => {
     e.preventDefault();

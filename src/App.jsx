@@ -6,6 +6,7 @@ import LandingPage from './pages/LandingPage';
 import Auth from './components/Auth';
 import AdminDashboard from './components/AdminDashboard';
 import ProtectedRoute from './components/ProtectedRoute';
+import ResetPassword from './pages/ResetPassword';
 
 function ConfigurationError() {
   return (
@@ -38,6 +39,16 @@ export default function App() {
         <Route 
           path="/login" 
           element={<Auth />} 
+        />
+        
+        <Route 
+          path="/auth" 
+          element={<Auth />} 
+        />
+        
+        <Route 
+          path="/reset-password" 
+          element={<ResetPassword />} 
         />
         
         <Route 

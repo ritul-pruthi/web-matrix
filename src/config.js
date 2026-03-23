@@ -1,4 +1,5 @@
 export const config = {
+  portalUrl: import.meta.env.VITE_PORTAL_URL || 'https://portal.web-matrix-solution.com',
   contact: {
     email: 'swebmatrix@gmail.com',
     phones: ['+91 9999792830', '+91 8447418323'],

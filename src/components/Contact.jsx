@@ -30,15 +30,23 @@ const CONTACT_INFO = [
   },
 ];
 
+const PORTAL_URL = 'https://portal.web-matrix-solution.com';
+
 export default function Contact() {
   const { user } = useAuth();
   const navigate = useNavigate();
 
   const handleInquiryClick = () => {
     if (!user) {
-      navigate('/auth');
+      navigate('/login');
+      return;
+    }
+
+    if (import.meta.env.DEV || window.location.hostname === 'localhost') {
+      console.log("Redirecting to portal...");
+      alert("Portal redirect successful (Local Test Mode)");
     } else {
-      window.location.href = 'https://portal.web-matrix-solution.com';
+      window.location.href = PORTAL_URL;
     }
   };
 

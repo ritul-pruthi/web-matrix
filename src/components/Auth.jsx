@@ -15,7 +15,7 @@ export default function Auth() {
       if (isAdmin) {
         navigate('/admin');
       } else {
-        window.location.href = 'https://portal.web-matrix-solution.com';
+        navigate('/');
       }
     }
   }, [user, isAdmin, loading, navigate]);

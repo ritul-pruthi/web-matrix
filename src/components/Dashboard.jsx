@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Home } from 'lucide-react';
 import { supabase } from '../supabase-client';
 import { useAuth } from '../context/AuthContext';
 
@@ -59,6 +60,26 @@ export default function Dashboard() {
           borderBottom: '1px solid rgba(255,255,255,0.1)',
           paddingBottom: '1rem'
         }}>
+          <button 
+            onClick={() => navigate('/')}
+            className="btn-glow"
+            style={{ 
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              padding: '0.5rem 1rem', 
+              borderRadius: '0.5rem', 
+              border: '1px solid var(--color-accent-secondary)', 
+              backgroundColor: 'transparent',
+              color: 'var(--color-accent-secondary)',
+              cursor: 'pointer',
+              fontFamily: 'var(--font-heading)',
+              transition: 'all 0.3s ease'
+            }}
+          >
+            <Home size={18} /> Home
+          </button>
+
           <h1 style={{ 
             fontFamily: 'var(--font-heading)', 
             margin: 0,
@@ -68,6 +89,7 @@ export default function Dashboard() {
           }}>
             User Dashboard
           </h1>
+          
           <button 
             onClick={handleLogout}
             className="btn-glow"

@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Mail, Phone, MapPin, Send } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
@@ -32,8 +33,9 @@ const CONTACT_INFO = [
 ];
 
 export default function Contact() {
+  const navigate = useNavigate();
   const { user, profile } = useAuth();
-  const [formData, setFormData] = useState({ name: '', email: '', phone: '', service: '', message: '', status: 'Not Started' });
+  const [formData, setFormData] = useState({ name: '', email: '', phone: '', service: '', message: '', status: '' });
   const [statusMsg, setStatusMsg] = useState({ type: '', text: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -47,13 +49,26 @@ export default function Contact() {
     }
   }, [user, profile]);
 
-  const handleInquirySubmit = async (e) => {
-    e.preventDefault();
-    if (!formData.name || !formData.email || !formData.message) {
-      setStatusMsg({ type: 'error', text: 'Please fill out all required fields.' });
-      return;
+  useEffect(() => {
+    const pending = localStorage.getItem('pendingInquiry');
+    if (pending) {
+      try {
+        const data = JSON.parse(pending);
+        setFormData(prev => ({ ...prev, ...data }));
+        localStorage.removeItem('pendingInquiry');
+        
+        const autoSubmit = localStorage.getItem('autoSubmitInquiry');
+        if (autoSubmit && user) {
+          localStorage.removeItem('autoSubmitInquiry');
+          submitInquiry(data);
+        }
+      } catch (err) {
+        console.error("Error parsing pending inquiry:", err);
+      }
     }
+  }, [user]);
 
+  const submitInquiry = async (data) => {
     setIsSubmitting(true);
     setStatusMsg({ type: '', text: '' });
 
@@ -61,17 +76,18 @@ export default function Contact() {
       .from('inquiries')
       .insert([{
         user_id: user ? user.id : null,
-        name: formData.name,
-        email: formData.email,
-        phone: formData.phone,
-        service: formData.service,
-        message: formData.message,
-        status: formData.status
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        service: data.service,
+        message: data.message,
+        status: data.status
       }]);
 
     setIsSubmitting(false);
 
     if (error) {
+      console.error('Supabase Inquiries Insert Error:', error);
       setStatusMsg({ type: 'error', text: 'Failed to submit inquiry: ' + error.message });
     } else {
       setStatusMsg({ type: 'success', text: 'Your inquiry has been submitted successfully!' });
@@ -81,9 +97,26 @@ export default function Contact() {
         phone: '', 
         service: '', 
         message: '',
-        status: 'Not Started'
+        status: ''
       });
     }
+  };
+
+  const handleInquirySubmit = async (e) => {
+    e.preventDefault();
+    if (!formData.name || !formData.email || !formData.message || !formData.status) {
+      setStatusMsg({ type: 'error', text: 'Please fill out all required fields.' });
+      return;
+    }
+
+    if (!user) {
+      localStorage.setItem('pendingInquiry', JSON.stringify(formData));
+      localStorage.setItem('autoSubmitInquiry', 'true');
+      navigate('/login', { state: { message: 'Please log in to submit your inquiry. Your details have been saved.' } });
+      return;
+    }
+
+    await submitInquiry(formData);
   };
 
   const inputStyle = {
@@ -152,12 +185,13 @@ export default function Contact() {
               <option value="SEO Optimization" style={{color: 'black'}}>SEO Optimization</option>
               <option value="Other" style={{color: 'black'}}>Other</option>
             </select>
-            <select value={formData.status} onChange={e => setFormData(f => ({...f, status: e.target.value}))} style={{...inputStyle, appearance: 'none'}}>
-              <option value="Not Started" style={{color: 'black'}}>Not Started</option>
-              <option value="In Planning" style={{color: 'black'}}>In Planning</option>
-              <option value="In Development" style={{color: 'black'}}>In Development</option>
-              <option value="In Production" style={{color: 'black'}}>In Production</option>
-              <option value="Completed" style={{color: 'black'}}>Completed</option>
+            <label htmlFor="status" style={{ color: 'rgba(255,255,255,0.8)', fontSize: '0.9rem', marginBottom: '0.5rem' }}>Project Status</label>
+            <select id="status" required value={formData.status} onChange={e => setFormData(f => ({...f, status: e.target.value}))} style={{...inputStyle, appearance: 'none'}}>
+              <option value="" disabled style={{color: 'black'}}>Select a status...</option>
+              <option value="not_started" style={{color: 'black'}}>Not Started</option>
+              <option value="in_development" style={{color: 'black'}}>In Development</option>
+              <option value="in_production" style={{color: 'black'}}>In Production</option>
+              <option value="completed" style={{color: 'black'}}>Completed</option>
             </select>
             <textarea placeholder="Tell us about your project *" value={formData.message} onChange={e => setFormData(f => ({...f, message: e.target.value}))} required rows={4} style={{...inputStyle, resize: 'vertical'}} />
             
@@ -171,10 +205,10 @@ export default function Contact() {
               type="submit"
               disabled={isSubmitting}
               className="btn btn-glow"
-              style={{ width: '100%', justifyContent: 'center', backgroundColor: 'rgba(6, 182, 212, 0.1)', border: '1px solid #06b6d4', color: 'white', boxShadow: '0 0 20px rgba(6, 182, 212, 0.4)', opacity: isSubmitting ? 0.7 : 1, cursor: isSubmitting ? 'not-allowed' : 'pointer' }}
+              style={{ width: '100%', justifyContent: 'center', backgroundColor: 'rgba(6, 182, 212, 0.1)', border: '1px solid #06b6d4', color: '#ffffff', boxShadow: '0 0 20px rgba(6, 182, 212, 0.4)', opacity: isSubmitting ? 0.7 : 1, cursor: isSubmitting ? 'not-allowed' : 'pointer' }}
             >
-              <Send style={{ width: 18, height: 18, marginRight: 8 }} />
-              {isSubmitting ? 'Sending...' : 'Send Enquiry'}
+              <Send style={{ width: 18, height: 18, marginRight: 8, color: '#ffffff' }} />
+              <span style={{ color: '#ffffff' }}>{isSubmitting ? 'Sending...' : 'Send Enquiry'}</span>
             </button>
           </form>
         </motion.div>

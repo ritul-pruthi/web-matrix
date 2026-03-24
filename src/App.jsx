@@ -5,8 +5,10 @@ import { isConfigured } from './supabase-client';
 import LandingPage from './pages/LandingPage';
 import Auth from './components/Auth';
 import AdminDashboard from './components/AdminDashboard';
+import Dashboard from './components/Dashboard';
 import ProtectedRoute from './components/ProtectedRoute';
 import ResetPassword from './pages/ResetPassword';
+import CyberCursor from './components/CyberCursor';
 
 function ConfigurationError() {
   return (
@@ -32,6 +34,7 @@ export default function App() {
 
   return (
     <AuthProvider>
+      <CyberCursor />
       <Router>
       <Routes>
         <Route path="/" element={<LandingPage />} />
@@ -52,9 +55,18 @@ export default function App() {
         />
         
         <Route 
+          path="/dashboard" 
+          element={
+            <ProtectedRoute requireAdmin={false}>
+              <Dashboard />
+            </ProtectedRoute>
+          } 
+        />
+        
+        <Route 
           path="/admin" 
           element={
-            <ProtectedRoute>
+            <ProtectedRoute requireAdmin={true}>
               <AdminDashboard />
             </ProtectedRoute>
           } 

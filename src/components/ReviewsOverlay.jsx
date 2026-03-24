@@ -32,14 +32,25 @@ export default function ReviewsOverlay({ isOpen, onClose }) {
   const [isWriting, setIsWriting] = useState(false);
   const [newReview, setNewReview] = useState({ text: '', stars: 5 });
   const [submitting, setSubmitting] = useState(false);
+  const [hasSubmitted, setHasSubmitted] = useState(false);
 
   const { user, profile } = useAuth();
+
+  useEffect(() => {
+    if (user) {
+      supabase.from('reviews').select('id').eq('user_id', user.id).then(({ data }) => {
+        if (data && data.length > 0) setHasSubmitted(true);
+      });
+    } else {
+      setHasSubmitted(false);
+    }
+  }, [user]);
 
   async function fetchReviews() {
     setLoading(true);
     const { data, error } = await supabase
       .from('reviews')
-      .select('*')
+      .select('*, profiles(full_name)')
       .eq('is_published', true);
       
     if (error) {
@@ -66,15 +77,14 @@ export default function ReviewsOverlay({ isOpen, onClose }) {
     if (!user) return;
     setSubmitting(true);
     
-    const userName = profile?.full_name || user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'Anonymous';
+    const rating = Math.max(1, Math.min(5, Number(newReview.stars)));
 
     const { error } = await supabase
       .from('reviews')
       .insert([{
-        name: userName,
-        stars: Number(newReview.stars),
-        half: false,
-        text: newReview.text,
+        user_id: user.id,
+        rating: rating,
+        comment: newReview.text,
         is_published: false
       }]);
 
@@ -86,6 +96,7 @@ export default function ReviewsOverlay({ isOpen, onClose }) {
       alert('Your review has been submitted and is pending approval. Thank you!');
       setIsWriting(false);
       setNewReview({ text: '', stars: 5 });
+      setHasSubmitted(true);
     }
   };
 
@@ -130,7 +141,7 @@ export default function ReviewsOverlay({ isOpen, onClose }) {
             </h2>
             
             <div style={{ minWidth: '130px', display: 'flex', justifyContent: 'flex-end' }}>
-              {user && !isWriting && (
+              {user && !isWriting && !hasSubmitted && (
                 <button
                   className="btn btn--outline"
                   onClick={() => setIsWriting(true)}
@@ -220,11 +231,11 @@ export default function ReviewsOverlay({ isOpen, onClose }) {
                             className="service-title"
                             style={{ color: 'var(--color-text-primary)', marginBottom: 0 }}
                           >
-                            {review.name}
+                            {review.profiles?.full_name || 'Anonymous User'}
                           </h3>
-                          <StarRating stars={Math.floor(review.stars)} half={review.half || review.stars % 1 !== 0} />
+                          <StarRating stars={Math.floor(review.rating)} half={false} />
                         </div>
-                        <p className="service-body">{review.text}</p>
+                        <p className="service-body">{review.comment}</p>
                       </motion.article>
                     ))}
                   </div>

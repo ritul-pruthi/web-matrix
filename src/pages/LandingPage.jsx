@@ -2,7 +2,6 @@ import { useState } from 'react';
 
 import ScrollProgress from '../components/ScrollProgress';
 import ParticleCanvas from '../components/ParticleCanvas';
-import CyberCursor from '../components/CyberCursor';
 import Navbar from '../components/Navbar';
 import Hero from '../components/Hero';
 import Services from '../components/Services';
@@ -20,7 +19,6 @@ export default function LandingPage() {
       {/* Fixed-layer UI */}
       <ScrollProgress />
       <ParticleCanvas />
-      <CyberCursor />
 
       {/* Page content */}
       <div className="page">

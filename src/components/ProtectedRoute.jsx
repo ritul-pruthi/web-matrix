@@ -1,14 +1,14 @@
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
-export default function ProtectedRoute({ children }) {
+export default function ProtectedRoute({ children, requireAdmin = false }) {
   const { user, isAdmin, signOut } = useAuth();
 
   if (!user) {
     return <Navigate to="/login" replace />;
   }
 
-  if (!isAdmin) {
+  if (requireAdmin && !isAdmin) {
     return (
       <div style={{ 
         minHeight: '100vh', 

@@ -7,7 +7,7 @@ import logoImg from '../assets/logo.jpeg';
 export default function Navbar({ onShowReviews }) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const { user: session, signOut } = useAuth();
+  const { user: session, isAdmin, signOut } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -65,7 +65,7 @@ export default function Navbar({ onShowReviews }) {
           ) : (
             <>
               <button 
-                onClick={() => navigate('/admin')}
+                onClick={() => navigate(isAdmin ? '/admin' : '/dashboard')}
                 className="btn-glow"
                 style={{
                   fontFamily: 'var(--font-heading)',

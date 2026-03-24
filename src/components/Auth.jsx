@@ -15,7 +15,7 @@ export default function Auth() {
       if (isAdmin) {
         navigate('/admin');
       } else {
-        navigate('/');
+        navigate('/dashboard');
       }
     }
   }, [user, isAdmin, loading, navigate]);

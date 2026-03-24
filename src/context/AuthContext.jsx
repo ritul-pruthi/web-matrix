@@ -49,6 +49,31 @@ export function AuthProvider({ children }) {
       .single();
 
     if (error) {
+      if (error.code === 'PGRST116') {
+        // Automatically create missing profile
+        const email = currentUser.email || '';
+        const defaultName = currentUser.user_metadata?.full_name || email.split('@')[0] || 'User';
+        
+        const { data: newProfile, error: insertError } = await supabase
+          .from('profiles')
+          .insert([{ 
+            id: currentUser.id, 
+            email: email, 
+            full_name: defaultName
+          }])
+          .select()
+          .single();
+          
+        if (insertError) {
+          console.error('Error creating profile automatically:', insertError);
+          setProfile(null);
+          setIsAdmin(false);
+          return;
+        }
+        setProfile(newProfile);
+        setIsAdmin(newProfile?.role === 'admin');
+        return;
+      }
       console.error('Error fetching profile:', error);
       setProfile(null);
       setIsAdmin(false);

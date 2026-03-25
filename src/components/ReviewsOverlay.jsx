@@ -33,6 +33,7 @@ export default function ReviewsOverlay({ isOpen, onClose }) {
   const [newReview, setNewReview] = useState({ text: '', stars: 5 });
   const [submitting, setSubmitting] = useState(false);
   const [hasSubmitted, setHasSubmitted] = useState(false);
+  const [successMsg, setSuccessMsg] = useState('');
 
   const { user, profile } = useAuth();
 
@@ -51,7 +52,8 @@ export default function ReviewsOverlay({ isOpen, onClose }) {
     const { data, error } = await supabase
       .from('reviews')
       .select('*, profiles(full_name)')
-      .eq('is_published', true);
+      .order('is_featured', { ascending: false })
+      .order('created_at', { ascending: false });
       
     if (error) {
       console.error('Error fetching reviews:', error);
@@ -64,12 +66,29 @@ export default function ReviewsOverlay({ isOpen, onClose }) {
   useEffect(() => {
     if (isOpen) {
       document.body.classList.add('no-scroll');
-      fetchReviews();
     } else {
       document.body.classList.remove('no-scroll');
       setIsWriting(false);
+      setSuccessMsg('');
     }
     return () => document.body.classList.remove('no-scroll');
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    fetchReviews();
+
+    const channel = supabase
+      .channel('reviews-realtime')
+      .on('postgres_changes', {
+        event: '*',
+        schema: 'public',
+        table: 'reviews'
+      }, () => fetchReviews())
+      .subscribe();
+
+    return () => supabase.removeChannel(channel);
   }, [isOpen]);
 
   const handleReviewSubmit = async (e) => {
@@ -85,7 +104,7 @@ export default function ReviewsOverlay({ isOpen, onClose }) {
         user_id: user.id,
         rating: rating,
         comment: newReview.text,
-        is_published: false
+        is_featured: false
       }]);
 
     setSubmitting(false);
@@ -93,10 +112,14 @@ export default function ReviewsOverlay({ isOpen, onClose }) {
     if (error) {
       alert('Failed to submit review: ' + error.message);
     } else {
-      alert('Your review has been submitted and is pending approval. Thank you!');
+      setSuccessMsg('✅ Your review is now live!');
+      fetchReviews();
       setIsWriting(false);
       setNewReview({ text: '', stars: 5 });
       setHasSubmitted(true);
+      
+      // Clear success message after 5 seconds
+      setTimeout(() => setSuccessMsg(''), 5000);
     }
   };
 
@@ -208,6 +231,11 @@ export default function ReviewsOverlay({ isOpen, onClose }) {
               </motion.div>
             ) : (
               <>
+                {successMsg && (
+                  <div style={{ color: '#10b981', textAlign: 'center', marginBottom: '1.5rem', fontSize: '1.1rem' }}>
+                    {successMsg}
+                  </div>
+                )}
                 {loading ? (
                   <div style={{ textAlign: 'center', padding: '3rem', color: 'var(--color-accent)' }}>
                     Loading reviews...
@@ -225,7 +253,17 @@ export default function ReviewsOverlay({ isOpen, onClose }) {
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: i * 0.08 }}
+                        style={{ position: 'relative' }}
                       >
+                        {review.is_featured && (
+                          <span style={{
+                            position: 'absolute', top: '0.75rem', right: '0.75rem',
+                            fontSize: '0.7rem', color: 'var(--color-accent)',
+                            border: '1px solid var(--color-accent)',
+                            borderRadius: '999px', padding: '0.15rem 0.5rem',
+                            boxShadow: '0 0 8px rgba(6,182,212,0.3)'
+                          }}>⭐ Featured</span>
+                        )}
                         <div className="review-header">
                           <h3
                             className="service-title"

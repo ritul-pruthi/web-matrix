@@ -35,7 +35,7 @@ const CONTACT_INFO = [
 export default function Contact() {
   const navigate = useNavigate();
   const { user, profile } = useAuth();
-  const [formData, setFormData] = useState({ name: '', email: '', phone: '', service: '', message: '', status: '' });
+  const [formData, setFormData] = useState({ name: '', email: '', phone: '', service: '', message: '', status: 'new' });
   const [statusMsg, setStatusMsg] = useState({ type: '', text: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -97,7 +97,7 @@ export default function Contact() {
         phone: '', 
         service: '', 
         message: '',
-        status: ''
+        status: 'new'
       });
     }
   };
@@ -187,11 +187,11 @@ export default function Contact() {
             </select>
             <label htmlFor="status" style={{ color: 'rgba(255,255,255,0.8)', fontSize: '0.9rem', marginBottom: '0.5rem' }}>Project Status</label>
             <select id="status" required value={formData.status} onChange={e => setFormData(f => ({...f, status: e.target.value}))} style={{...inputStyle, appearance: 'none'}}>
-              <option value="" disabled style={{color: 'black'}}>Select a status...</option>
-              <option value="not_started" style={{color: 'black'}}>Not Started</option>
-              <option value="in_development" style={{color: 'black'}}>In Development</option>
-              <option value="in_production" style={{color: 'black'}}>In Production</option>
-              <option value="completed" style={{color: 'black'}}>Completed</option>
+              <option value="" disabled style={{color:'black'}}>Select a status...</option>
+              <option value="new" style={{color:'black'}}>New</option>
+              <option value="in-progress" style={{color:'black'}}>In Progress</option>
+              <option value="completed" style={{color:'black'}}>Completed</option>
+              <option value="archived" style={{color:'black'}}>Archived</option>
             </select>
             <textarea placeholder="Tell us about your project *" value={formData.message} onChange={e => setFormData(f => ({...f, message: e.target.value}))} required rows={4} style={{...inputStyle, resize: 'vertical'}} />
             

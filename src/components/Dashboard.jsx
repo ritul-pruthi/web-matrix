@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Home, Zap, ArrowUpRight, Power, LayoutDashboard } from 'lucide-react';
+import { Home, Zap, ArrowUpRight, Power, LayoutDashboard, Settings } from 'lucide-react';
 import { supabase } from '../supabase-client';
 import { useAuth } from '../context/AuthContext';
 
@@ -31,6 +31,8 @@ export default function Dashboard() {
 
   if (loading) return null;
 
+  const firstName = profile?.full_name?.split(' ')[0] || 'Ritul';
+
   return (
     <>
       <div className="mosaic-bg"></div>
@@ -57,12 +59,8 @@ export default function Dashboard() {
               marginBottom: '1rem',
               letterSpacing: '-0.04em'
             }}>
-              Hello, {profile?.full_name?.split(' ')[0] || 'User'}.
+              Hello, {firstName}.
             </h1>
-            <div className="meta-text" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--color-accent)' }}>
-              <span style={{ display: 'inline-block', width: '8px', height: '8px', borderRadius: '50%', backgroundColor: 'var(--color-accent)', boxShadow: '0 0 8px var(--color-accent)' }}></span>
-              system_status: optimal // access_granted
-            </div>
           </div>
           
           <button 
@@ -100,7 +98,7 @@ export default function Dashboard() {
                 width: '72px',
                 height: '72px',
                 borderRadius: '16px',
-                background: 'var(--accent-gradient)',
+                background: profile?.avatar_url ? 'transparent' : 'var(--accent-gradient)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -108,33 +106,23 @@ export default function Dashboard() {
                 fontSize: '2rem',
                 fontWeight: 'bold',
                 color: '#05080a',
-                boxShadow: '0 8px 24px rgba(16, 185, 129, 0.3)'
+                boxShadow: '0 8px 24px rgba(16, 185, 129, 0.3)',
+                overflow: 'hidden',
+                flexShrink: 0
               }}>
-                {profile?.full_name ? profile.full_name.substring(0, 2).toUpperCase() : 'U'}
+                {profile?.avatar_url
+                  ? <img src={profile.avatar_url} alt="avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  : (profile?.full_name ? profile.full_name.substring(0, 2).toUpperCase() : 'U')
+                }
               </div>
               <div>
                 <div style={{ fontSize: '1.4rem', fontWeight: '500', color: 'white', marginBottom: '0.3rem', fontFamily: 'var(--font-heading)' }}>
-                  {profile?.full_name || 'Verified User'}
+                  {profile?.full_name || '—'}
                 </div>
                 <div className="meta-text" style={{ textTransform: 'none', letterSpacing: 'normal' }}>
                   {user?.email}
                 </div>
               </div>
-            </div>
-            
-            <div style={{
-              padding: '1.25rem',
-              backgroundColor: 'rgba(0,0,0,0.3)',
-              borderRadius: '12px',
-              border: '1px solid rgba(255,255,255,0.05)',
-              marginTop: 'auto'
-            }}>
-               <div className="meta-text" style={{ color: 'rgba(255,255,255,0.5)', marginBottom: '0.5rem' }}>
-                 Identity_Status
-               </div>
-               <div className="meta-text" style={{ color: 'var(--color-accent)' }}>
-                 Access_Level: Matrix_Verified
-               </div>
             </div>
           </div>
 
@@ -219,7 +207,7 @@ export default function Dashboard() {
              <div style={{ display: 'flex', gap: '1rem', flexDirection: 'column', flexGrow: 1, justifyContent: 'space-between' }}>
                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                  <button 
-                    onClick={() => navigate('/#contact')}
+                    onClick={() => navigate('/settings')}
                     className="border-beam"
                     style={{
                       display: 'flex',
@@ -237,7 +225,7 @@ export default function Dashboard() {
                     }}
                  >
                    <span style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                     <Zap size={18} style={{ color: 'var(--color-accent)' }} /> Deploy New Project
+                     <Settings size={18} style={{ color: 'var(--color-accent)' }} /> Settings
                    </span>
                    <ArrowUpRight size={18} style={{ color: 'rgba(255,255,255,0.5)' }} />
                  </button>
@@ -286,7 +274,7 @@ export default function Dashboard() {
                   }}
                >
                  <span style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                   <Power size={18} /> Disconnect Session
+                   <Power size={18} /> Logout
                  </span>
                </button>
              </div>

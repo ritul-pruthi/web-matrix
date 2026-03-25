@@ -6,6 +6,7 @@ import LandingPage from './pages/LandingPage';
 import Auth from './components/Auth';
 import AdminDashboard from './components/AdminDashboard';
 import Dashboard from './components/Dashboard';
+import Settings from './components/Settings';
 import ProtectedRoute from './components/ProtectedRoute';
 import ResetPassword from './pages/ResetPassword';
 import CyberCursor from './components/CyberCursor';
@@ -59,6 +60,15 @@ export default function App() {
           element={
             <ProtectedRoute requireAdmin={false}>
               <Dashboard />
+            </ProtectedRoute>
+          } 
+        />
+        
+        <Route 
+          path="/settings" 
+          element={
+            <ProtectedRoute requireAdmin={false}>
+              <Settings />
             </ProtectedRoute>
           } 
         />

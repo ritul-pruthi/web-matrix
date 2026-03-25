@@ -1,13 +1,8 @@
 /* eslint-disable no-unused-vars */
-import { Compass, Palette, Code, ShoppingCart, Monitor, Settings } from 'lucide-react';
+import { Palette, Code, Monitor, PenTool, Bot, Video, FileUser, Megaphone, Globe } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const SERVICES_DATA = [
-  {
-    icon: Compass,
-    title: 'Product Strategy',
-    body: 'Clarify the opportunity, define the roadmap, and align teams around a digital vision that actually ships.',
-  },
   {
     icon: Palette,
     title: 'Brand & UX Design',
@@ -19,19 +14,44 @@ const SERVICES_DATA = [
     body: 'Robust, scalable web platforms built with modern tooling, clean architecture, and performance-first thinking.',
   },
   {
-    icon: ShoppingCart,
-    title: 'E‑Commerce Experiences',
-    body: 'High-converting storefronts, custom flows, and integrations that turn visitors into loyal customers.',
-  },
-  {
     icon: Monitor,
     title: 'Web Applications',
     body: 'Data-rich dashboards and internal tools that give your team superpowers instead of friction.',
   },
   {
-    icon: Settings,
-    title: 'Ongoing Optimization',
-    body: 'Continuous improvements to speed, UX, and conversions so your product never falls behind.',
+    icon: PenTool,
+    title: 'Content Writing',
+    body: 'Engaging, SEO-optimized content that tells your brand story and drives conversions.',
+  },
+  {
+    icon: Bot,
+    title: 'AI and Automation Services',
+    body: 'Streamline operations and elevate user experiences with intelligent tools and automated workflows.',
+  },
+  {
+    icon: Video,
+    title: 'Video & Reel Editing',
+    body: 'High-quality video content and engaging reels to capture your audience across social media.',
+  },
+  {
+    icon: FileUser,
+    title: 'Resume & Profile Optimizations',
+    body: 'Professional resume building and LinkedIn profile enhancements to stand out to recruiters.',
+  },
+  {
+    icon: Palette,
+    title: 'Logo & Brand Design',
+    body: 'Distinctive visual identities, logos, and style guidelines that set you apart from competitors.',
+  },
+  {
+    icon: Megaphone,
+    title: 'Posters & Social Media Creatives',
+    body: 'Eye-catching graphics and creatives scaled perfectly for every social platform and campaign.',
+  },
+  {
+    icon: Globe,
+    title: 'Ecommerce Websites and Landing Pages',
+    body: 'Sales-focused web destinations and intuitive storefronts designed to maximize conversions.',
   },
 ];
 

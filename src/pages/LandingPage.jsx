@@ -10,6 +10,7 @@ import Location from '../components/Location';
 import Contact from '../components/Contact';
 import Footer from '../components/Footer';
 import ReviewsOverlay from '../components/ReviewsOverlay';
+import Reviews from '../components/Reviews';
 
 export default function LandingPage() {
   const [showReviews, setShowReviews] = useState(false);
@@ -28,6 +29,7 @@ export default function LandingPage() {
           <Hero />
           <Services />
           <About />
+          <Reviews />
           <Location />
           <Contact />
         </main>

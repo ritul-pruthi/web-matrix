@@ -866,3 +866,102 @@ body.no-scroll {
     align-items: flex-start;
   }
 }
+
+/* ── Mosaic Aesthetic Classes ── */
+
+.mosaic-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #05080a;
+  z-index: -2;
+  pointer-events: none;
+}
+
+.mesh-blob {
+  position: fixed;
+  width: 50vw;
+  height: 50vw;
+  background: var(--accent-gradient);
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.15;
+  z-index: -1;
+  pointer-events: none;
+  animation: floatMesh 20s infinite alternate ease-in-out;
+}
+
+.mesh-blob.blob-1 {
+  top: -10%;
+  left: -10%;
+}
+
+.mesh-blob.blob-2 {
+  bottom: -10%;
+  right: -10%;
+  animation-delay: -10s;
+}
+
+@keyframes floatMesh {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(10%, 10%) scale(1.1); }
+}
+
+.bento-tile {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+  padding: 2rem;
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.bento-tile:hover {
+  border-color: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.meta-text {
+  font-family: 'Space Mono', 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.border-beam {
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  z-index: 1;
+}
+
+.border-beam::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  border-radius: 12px;
+  padding: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: -1;
+}
+
+.border-beam:hover::before {
+  opacity: 1;
+  animation: beamMove 2s linear infinite;
+}
+
+@keyframes beamMove {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}

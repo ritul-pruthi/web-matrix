@@ -10,7 +10,6 @@ export default function Reviews() {
       const { data, error } = await supabase
         .from('reviews')
         .select('*, profiles(full_name)')
-        .eq('status', 'approved')
         .order('created_at', { ascending: false })
         .limit(6);
 
@@ -24,45 +23,76 @@ export default function Reviews() {
   }, []);
 
   return (
-    <section className="section" id="reviews" style={{ padding: '4rem 2rem' }}>
-      <div className="container" style={{ maxWidth: '1200px', margin: '0 auto' }}>
-        <h2 className="section-title" style={{ textAlign: 'center', marginBottom: '3rem', fontSize: '2.5rem', color: 'var(--color-primary, #fff)' }}>What Our Clients Say</h2>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
-          {reviews.map((review) => (
-            <div 
-              key={review.id} 
-              style={{
-                padding: '2rem',
-                borderRadius: '12px',
-                background: 'rgba(255, 255, 255, 0.05)',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                backdropFilter: 'blur(10px)',
-                transition: 'all 0.3s ease',
-                cursor: 'pointer',
-                boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.boxShadow = '0 0 20px 5px var(--color-accent, #00ffff)';
-                e.currentTarget.style.transform = 'translateY(-5px)';
-                e.currentTarget.style.borderColor = 'var(--color-accent, #00ffff)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
-                e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
-              }}
-            >
-              <div style={{ display: 'flex', gap: '4px', marginBottom: '1rem' }}>
-                {[...Array(review.stars || 5)].map((_, i) => (
-                  <Star key={i} size={16} fill="var(--color-accent, #00ffff)" color="var(--color-accent, #00ffff)" />
-                ))}
-              </div>
-              <p style={{ fontSize: '1.1rem', marginBottom: '1.5rem', fontStyle: 'italic', color: '#e2e8f0' }}>"{review.text}"</p>
-              <div style={{ fontWeight: 'bold', color: 'var(--color-primary, #fff)' }}>{review.profiles?.full_name || 'Anonymous User'}</div>
+    <div style={{ padding: '0', width: '100%', containerType: 'inline-size' }}>
+      <div style={{ 
+        display: 'grid', 
+        gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', 
+        gap: '1.5rem',
+        gridAutoRows: 'min-content'
+      }}>
+        {reviews.map((review) => (
+          <div 
+            key={review.id} 
+            style={{
+              padding: '1.5rem',
+              borderRadius: '16px',
+              background: 'rgba(16, 185, 129, 0.03)',
+              border: '1px solid rgba(16, 185, 129, 0.15)',
+              backdropFilter: 'blur(12px)',
+              WebkitBackdropFilter: 'blur(12px)',
+              transition: 'all 0.3s ease',
+              cursor: 'pointer',
+              boxShadow: '0 4px 20px rgba(0, 0, 0, 0.05)',
+              display: 'flex',
+              flexDirection: 'column',
+              height: '100%'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.boxShadow = '0 0 20px rgba(16, 185, 129, 0.2)';
+              e.currentTarget.style.transform = 'translateY(-4px)';
+              e.currentTarget.style.borderColor = 'rgba(16, 185, 129, 0.4)';
+              e.currentTarget.style.background = 'rgba(16, 185, 129, 0.06)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.05)';
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.borderColor = 'rgba(16, 185, 129, 0.15)';
+              e.currentTarget.style.background = 'rgba(16, 185, 129, 0.03)';
+            }}
+          >
+            <div style={{ display: 'flex', gap: '4px', marginBottom: '1rem' }}>
+              {[...Array(Math.floor(review.rating || 5))].map((_, i) => (
+                <Star key={i} size={16} fill="var(--color-accent, #10b981)" color="var(--color-accent, #10b981)" />
+              ))}
             </div>
-          ))}
-        </div>
+            <p style={{ 
+              fontSize: '1rem', 
+              marginBottom: '1.5rem', 
+              fontStyle: 'italic', 
+              color: '#e2e8f0',
+              display: '-webkit-box',
+              WebkitLineClamp: 4,
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              lineHeight: '1.5'
+            }}>"{review.comment}"</p>
+            <div style={{ marginTop: 'auto', fontWeight: '500', color: 'var(--color-text-primary, #fff)', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+              <div style={{ 
+                width: '32px', height: '32px', borderRadius: '50%', 
+                background: 'var(--color-accent, #10b981)', display: 'flex', 
+                alignItems: 'center', justifyContent: 'center', fontWeight: 'bold',
+                color: '#05080a', flexShrink: 0
+              }}>
+                {(review.profiles?.full_name || 'A').charAt(0).toUpperCase()}
+              </div>
+              <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                {review.profiles?.full_name || 'Anonymous User'}
+              </span>
+            </div>
+          </div>
+        ))}
       </div>
-    </section>
+    </div>
   );
 }

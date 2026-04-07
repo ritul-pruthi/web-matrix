@@ -30,7 +30,7 @@ export default function ReviewsOverlay({ isOpen, onClose }) {
   const [reviewsData, setReviewsData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isWriting, setIsWriting] = useState(false);
-  const [newReview, setNewReview] = useState({ text: '', stars: 5 });
+  const [newReview, setNewReview] = useState({ comment: '', rating: 5 });
   const [submitting, setSubmitting] = useState(false);
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [successMsg, setSuccessMsg] = useState('');
@@ -96,14 +96,14 @@ export default function ReviewsOverlay({ isOpen, onClose }) {
     if (!user) return;
     setSubmitting(true);
     
-    const rating = Math.max(1, Math.min(5, Number(newReview.stars)));
+    const ratingValue = Math.max(1, Math.min(5, Number(newReview.rating)));
 
     const { error } = await supabase
       .from('reviews')
       .insert([{
         user_id: user.id,
-        rating: rating,
-        comment: newReview.text,
+        rating: ratingValue,
+        comment: newReview.comment,
         is_featured: false
       }]);
 
@@ -115,7 +115,7 @@ export default function ReviewsOverlay({ isOpen, onClose }) {
       setSuccessMsg('✅ Your review is now live!');
       fetchReviews();
       setIsWriting(false);
-      setNewReview({ text: '', stars: 5 });
+      setNewReview({ comment: '', rating: 5 });
       setHasSubmitted(true);
       
       // Clear success message after 5 seconds
@@ -187,8 +187,8 @@ export default function ReviewsOverlay({ isOpen, onClose }) {
                 <form onSubmit={handleReviewSubmit}>
                   <label style={{ display: 'block', marginBottom: '0.5rem', color: 'rgba(255,255,255,0.8)' }}>Rating</label>
                   <select 
-                    value={newReview.stars} 
-                    onChange={(e) => setNewReview(prev => ({ ...prev, stars: e.target.value }))}
+                    value={newReview.rating} 
+                    onChange={(e) => setNewReview(prev => ({ ...prev, rating: e.target.value }))}
                     style={{ ...inputStyle, appearance: 'none' }}
                   >
                     <option value="5" style={{color: 'black'}}>⭐⭐⭐⭐⭐ - Excellent</option>
@@ -200,8 +200,8 @@ export default function ReviewsOverlay({ isOpen, onClose }) {
 
                   <label style={{ display: 'block', marginBottom: '0.5rem', color: 'rgba(255,255,255,0.8)' }}>Your Review</label>
                   <textarea 
-                    value={newReview.text} 
-                    onChange={(e) => setNewReview(prev => ({ ...prev, text: e.target.value }))}
+                    value={newReview.comment} 
+                    onChange={(e) => setNewReview(prev => ({ ...prev, comment: e.target.value }))}
                     placeholder="Tell us about your project and experience with WebMatrix..."
                     required
                     rows={5}

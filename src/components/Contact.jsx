@@ -35,7 +35,7 @@ const CONTACT_INFO = [
 export default function Contact() {
   const navigate = useNavigate();
   const { user, profile } = useAuth();
-  const [formData, setFormData] = useState({ name: '', email: '', phone: '', service: '', message: '', status: 'new' });
+  const [formData, setFormData] = useState({ name: '', email: '', phone: '', service: '', message: '', status: 'new', botField: '' });
   const [statusMsg, setStatusMsg] = useState({ type: '', text: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -104,6 +104,10 @@ export default function Contact() {
 
   const handleInquirySubmit = async (e) => {
     e.preventDefault();
+    if (formData.botField) {
+      console.warn("Spam detected");
+      return; // Silently reject
+    }
     if (!formData.name || !formData.email || !formData.message) {
       setStatusMsg({ type: 'error', text: 'Please fill out all required fields.' });
       return;
@@ -168,6 +172,7 @@ export default function Contact() {
           <h3 className="starter-title" style={{ marginBottom: '1.5rem' }}>Start Your Project</h3>
           
           <form onSubmit={handleInquirySubmit} style={{ display: 'flex', flexDirection: 'column' }}>
+            <input type="text" style={{ display: 'none' }} value={formData.botField} onChange={e => setFormData(f => ({...f, botField: e.target.value}))} tabIndex={-1} autoComplete="off" />
             <input type="text" placeholder="Your Name *" value={formData.name} onChange={e => setFormData(f => ({...f, name: e.target.value}))} required style={inputStyle} />
             <input type="email" placeholder="Your Email *" value={formData.email} onChange={e => setFormData(f => ({...f, email: e.target.value}))} required style={inputStyle} />
             <input type="tel" placeholder="Your Phone" value={formData.phone} onChange={e => setFormData(f => ({...f, phone: e.target.value}))} style={inputStyle} />

@@ -68,17 +68,6 @@ export default function Auth() {
         if (signUpError) throw signUpError;
 
         if (data?.user) {
-          // Attempt to create profile manually
-          const { error: profileError } = await supabase
-            .from('profiles')
-            .upsert([
-              { id: data.user.id, full_name: fullName, email: email }
-            ]);
-            
-          if (profileError) {
-             console.error("Profile creation error:", profileError);
-          }
-          
           setMessage('Sign up successful! Please check your email for a confirmation link.');
           // Reset form fields
           setView('sign_in');
@@ -94,7 +83,13 @@ export default function Auth() {
         if (signInError) throw signInError;
       }
     } catch (err) {
-      setError(err.message);
+      if (err.code === 'user_already_exists') {
+        setError('An account with this email already exists.');
+      } else if (err.code === 'invalid_credentials') {
+        setError('Invalid email or password.');
+      } else {
+        setError(err.message);
+      }
     } finally {
       setIsSubmitting(false);
     }

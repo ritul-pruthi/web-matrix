@@ -12,6 +12,7 @@ export function useReviews() {
       const { data, error } = await supabase
         .from('reviews')
         .select('*, profiles(full_name, avatar_url)')
+        .order('is_featured', { ascending: false })
         .order('created_at', { ascending: false });
 
       if (error) {
@@ -29,19 +30,28 @@ export function useReviews() {
 
   useEffect(() => {
     fetchReviews();
+
+    const channel = supabase
+      .channel('reviews-realtime')
+      .on('postgres_changes', {
+        event: '*',
+        schema: 'public',
+        table: 'reviews'
+      }, () => fetchReviews())
+      .subscribe();
+
+    return () => supabase.removeChannel(channel);
   }, []);
 
   const addReview = async (userId, rating, comment) => {
     try {
       const { data, error } = await supabase
         .from('reviews')
-        .insert([{ user_id: userId, rating, comment }])
+        .insert([{ user_id: userId, rating, comment, is_featured: false }])
         .select();
 
       if (error) throw error;
       
-      // Refresh reviews after adding
-      await fetchReviews();
       return { data, error: null };
     } catch (err) {
       return { data: null, error: err.message };

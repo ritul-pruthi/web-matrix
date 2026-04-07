@@ -4,6 +4,7 @@ import { Star, StarHalf, ArrowLeft, Edit3 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
+import { useReviews } from '../hooks/useReviews';
 
 function StarRating({ stars, half }) {
   const filled = [];
@@ -27,15 +28,14 @@ function StarRating({ stars, half }) {
 }
 
 export default function ReviewsOverlay({ isOpen, onClose }) {
-  const [reviewsData, setReviewsData] = useState([]);
-  const [loading, setLoading] = useState(false);
   const [isWriting, setIsWriting] = useState(false);
   const [newReview, setNewReview] = useState({ comment: '', rating: 5 });
   const [submitting, setSubmitting] = useState(false);
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [successMsg, setSuccessMsg] = useState('');
 
-  const { user, profile } = useAuth();
+  const { user } = useAuth();
+  const { reviews: reviewsData, addReview } = useReviews();
 
   useEffect(() => {
     if (user) {
@@ -46,22 +46,6 @@ export default function ReviewsOverlay({ isOpen, onClose }) {
       setHasSubmitted(false);
     }
   }, [user]);
-
-  async function fetchReviews() {
-    setLoading(true);
-    const { data, error } = await supabase
-      .from('reviews')
-      .select('*, profiles(full_name)')
-      .order('is_featured', { ascending: false })
-      .order('created_at', { ascending: false });
-      
-    if (error) {
-      console.error('Error fetching reviews:', error);
-    } else if (data) {
-      setReviewsData(data);
-    }
-    setLoading(false);
-  }
 
   useEffect(() => {
     if (isOpen) {
@@ -74,23 +58,6 @@ export default function ReviewsOverlay({ isOpen, onClose }) {
     return () => document.body.classList.remove('no-scroll');
   }, [isOpen]);
 
-  useEffect(() => {
-    if (!isOpen) return;
-
-    fetchReviews();
-
-    const channel = supabase
-      .channel('reviews-realtime')
-      .on('postgres_changes', {
-        event: '*',
-        schema: 'public',
-        table: 'reviews'
-      }, () => fetchReviews())
-      .subscribe();
-
-    return () => supabase.removeChannel(channel);
-  }, [isOpen]);
-
   const handleReviewSubmit = async (e) => {
     e.preventDefault();
     if (!user) return;
@@ -98,22 +65,14 @@ export default function ReviewsOverlay({ isOpen, onClose }) {
     
     const ratingValue = Math.max(1, Math.min(5, Number(newReview.rating)));
 
-    const { error } = await supabase
-      .from('reviews')
-      .insert([{
-        user_id: user.id,
-        rating: ratingValue,
-        comment: newReview.comment,
-        is_featured: false
-      }]);
+    const { error } = await addReview(user.id, ratingValue, newReview.comment);
 
     setSubmitting(false);
 
     if (error) {
-      alert('Failed to submit review: ' + error.message);
+      alert('Failed to submit review: ' + error);
     } else {
       setSuccessMsg('✅ Your review is now live!');
-      fetchReviews();
       setIsWriting(false);
       setNewReview({ comment: '', rating: 5 });
       setHasSubmitted(true);

@@ -194,7 +194,68 @@ img {
   color: transparent;
 }
 
-/* ── Page Layout ── */
+/* ── Dashboard & Settings ── */
+.dashboard-container {
+  min-height: 100vh;
+  padding: 4rem 2rem;
+  position: relative;
+  z-index: 10;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.dashboard-header {
+  margin-bottom: 3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.5rem;
+  align-items: stretch;
+}
+
+.identity-card {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.settings-input {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  background-color: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 10px;
+  color: white;
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  outline: none;
+  transition: border-color var(--transition-fast);
+  box-sizing: border-box;
+}
+
+.settings-input:focus {
+  border-color: var(--color-accent);
+}
+
+.settings-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  font-family: var(--font-heading);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 0.6rem;
+}
+
 .page {
   max-width: 1120px;
   margin: 0 auto;

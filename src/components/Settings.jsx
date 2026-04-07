@@ -82,31 +82,7 @@ export default function Settings() {
   };
 
   /* ── Shared styles ── */
-  const inputStyle = {
-    width: '100%',
-    padding: '0.85rem 1rem',
-    backgroundColor: 'rgba(255,255,255,0.04)',
-    border: '1px solid rgba(255,255,255,0.1)',
-    borderRadius: '10px',
-    color: 'white',
-    fontFamily: '"Space Grotesk", "Outfit", sans-serif',
-    fontSize: '1rem',
-    outline: 'none',
-    transition: 'border-color 0.2s ease',
-    boxSizing: 'border-box',
-  };
-
-  const labelStyle = {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '0.5rem',
-    fontSize: '0.75rem',
-    fontFamily: '"Space Grotesk", "Outfit", sans-serif',
-    letterSpacing: '0.08em',
-    textTransform: 'uppercase',
-    color: 'rgba(255,255,255,0.4)',
-    marginBottom: '0.6rem',
-  };
+  // Styles moved to src/index.css
 
   return (
     <>
@@ -115,17 +91,10 @@ export default function Settings() {
       <div className="mesh-blob blob-1"></div>
       <div className="mesh-blob blob-2"></div>
 
-      <div style={{
-        minHeight: '100vh',
-        padding: '4rem 2rem',
-        position: 'relative',
-        zIndex: 10,
-        maxWidth: '1280px',
-        margin: '0 auto',
-      }}>
+      <div className="dashboard-container">
 
         {/* ── Header ── */}
-        <header style={{ marginBottom: '3rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
+        <header className="dashboard-header">
           <div>
             <h1 style={{
               fontFamily: '"Space Grotesk", "Outfit", sans-serif',
@@ -163,15 +132,10 @@ export default function Settings() {
 
         {/* ── Bento Grid ── */}
         <form onSubmit={handleSave}>
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-            gap: '1.5rem',
-            alignItems: 'start',
-          }}>
+          <div className="bento-grid">
 
             {/* ── Tile 1: Avatar ── */}
-            <div className="bento-tile" style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem', alignItems: 'center', textAlign: 'center' }}>
+            <div className="bento-tile identity-card" style={{ alignItems: 'center', textAlign: 'center' }}>
               <h3 style={{ margin: 0, fontFamily: '"Space Grotesk", sans-serif', fontSize: '1.1rem', fontWeight: 400, color: 'white', display: 'flex', alignItems: 'center', gap: '0.6rem', alignSelf: 'flex-start' }}>
                 <Camera size={18} style={{ color: 'var(--color-accent)' }} /> Profile Picture
               </h3>
@@ -235,24 +199,25 @@ export default function Settings() {
 
               {/* Full Name */}
               <div>
-                <label style={labelStyle}><User size={12} /> Full Name</label>
+                <label className="settings-label"><User size={12} /> Full Name</label>
                 <input
                   type="text"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
                   placeholder="Your full name"
-                  style={inputStyle}
+                  className="settings-input"
                 />
               </div>
 
               {/* Email (read-only) */}
               <div>
-                <label style={labelStyle}><Mail size={12} /> Email Address</label>
+                <label className="settings-label"><Mail size={12} /> Email Address</label>
                 <input
                   type="email"
                   value={user?.email || ''}
                   readOnly
-                  style={{ ...inputStyle, opacity: 0.45, cursor: 'not-allowed' }}
+                  className="settings-input"
+                  style={{ opacity: 0.45, cursor: 'not-allowed' }}
                 />
                 <p style={{ marginTop: '0.4rem', fontSize: '0.72rem', color: 'rgba(255,255,255,0.25)', fontFamily: '"Space Grotesk", sans-serif' }}>
                   Email is managed through authentication settings.

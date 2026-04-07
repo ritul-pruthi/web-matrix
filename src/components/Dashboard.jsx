@@ -31,7 +31,7 @@ export default function Dashboard() {
 
   if (loading) return null;
 
-  const firstName = profile?.full_name?.split(' ')[0] || 'Ritul';
+  const firstName = profile?.full_name?.split(' ')[0] || '';
 
   return (
     <>
@@ -39,16 +39,9 @@ export default function Dashboard() {
       <div className="mesh-blob blob-1"></div>
       <div className="mesh-blob blob-2"></div>
       
-      <div style={{ 
-        minHeight: '100vh', 
-        padding: '4rem 2rem',
-        position: 'relative',
-        zIndex: 10,
-        maxWidth: '1280px',
-        margin: '0 auto'
-      }}>
+      <div className="dashboard-container">
         {/* Header */}
-        <header style={{ marginBottom: '3rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
+        <header className="dashboard-header">
           <div>
             <h1 style={{ 
               fontFamily: '"Space Grotesk", "Outfit", sans-serif', 
@@ -84,15 +77,10 @@ export default function Dashboard() {
         </header>
 
         {/* 3-Column Grid Layout */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-          gap: '1.5rem',
-          alignItems: 'stretch'
-        }}>
+        <div className="bento-grid">
           
           {/* Tile 1: Identity */}
-          <div className="bento-tile" style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+          <div className="bento-tile identity-card">
             <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
               <div style={{
                 width: '72px',

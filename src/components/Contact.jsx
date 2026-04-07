@@ -5,7 +5,7 @@ import { Mail, Phone, MapPin, Send } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 import { config } from '../config';
-import { supabase } from '../supabase-client';
+import { supabase } from '../lib/supabase';
 
 const CONTACT_INFO = [
   {
@@ -81,7 +81,7 @@ export default function Contact() {
         phone: data.phone,
         service: data.service,
         message: data.message,
-        status: data.status
+        status: 'new'
       }]);
 
     setIsSubmitting(false);
@@ -104,19 +104,12 @@ export default function Contact() {
 
   const handleInquirySubmit = async (e) => {
     e.preventDefault();
-    if (!formData.name || !formData.email || !formData.message || !formData.status) {
+    if (!formData.name || !formData.email || !formData.message) {
       setStatusMsg({ type: 'error', text: 'Please fill out all required fields.' });
       return;
     }
 
-    if (!user) {
-      localStorage.setItem('pendingInquiry', JSON.stringify(formData));
-      localStorage.setItem('autoSubmitInquiry', 'true');
-      navigate('/login', { state: { message: 'Please log in to submit your inquiry. Your details have been saved.' } });
-      return;
-    }
-
-    await submitInquiry(formData);
+    await submitInquiry({ ...formData, status: 'new' });
   };
 
   const inputStyle = {
@@ -184,14 +177,6 @@ export default function Contact() {
               <option value="UI/UX Design" style={{color: 'black'}}>UI/UX Design</option>
               <option value="SEO Optimization" style={{color: 'black'}}>SEO Optimization</option>
               <option value="Other" style={{color: 'black'}}>Other</option>
-            </select>
-            <label htmlFor="status" style={{ color: 'rgba(255,255,255,0.8)', fontSize: '0.9rem', marginBottom: '0.5rem' }}>Project Status</label>
-            <select id="status" required value={formData.status} onChange={e => setFormData(f => ({...f, status: e.target.value}))} style={{...inputStyle, appearance: 'none'}}>
-              <option value="" disabled style={{color:'black'}}>Select a status...</option>
-              <option value="new" style={{color:'black'}}>New</option>
-              <option value="in-progress" style={{color:'black'}}>In Progress</option>
-              <option value="completed" style={{color:'black'}}>Completed</option>
-              <option value="archived" style={{color:'black'}}>Archived</option>
             </select>
             <textarea placeholder="Tell us about your project *" value={formData.message} onChange={e => setFormData(f => ({...f, message: e.target.value}))} required rows={4} style={{...inputStyle, resize: 'vertical'}} />
             

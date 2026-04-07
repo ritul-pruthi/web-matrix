@@ -1,6 +1,11 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
-import { isConfigured } from './supabase-client';
+import { isConfigured } from './lib/supabase';
+
+import DashboardLayout from './pages/Dashboard/Layout';
+import DashboardOverview from './pages/Dashboard/index';
+import InquiriesAdmin from './pages/Dashboard/Inquiries';
+import ReviewsAdmin from './pages/Dashboard/Reviews';
 
 import LandingPage from './pages/LandingPage';
 import Auth from './components/Auth';
@@ -58,11 +63,15 @@ export default function App() {
         <Route 
           path="/dashboard" 
           element={
-            <ProtectedRoute requireAdmin={false}>
-              <Dashboard />
+            <ProtectedRoute requireAdmin={true}>
+              <DashboardLayout />
             </ProtectedRoute>
           } 
-        />
+        >
+          <Route index element={<DashboardOverview />} />
+          <Route path="inquiries" element={<InquiriesAdmin />} />
+          <Route path="reviews" element={<ReviewsAdmin />} />
+        </Route>
         
         <Route 
           path="/settings" 

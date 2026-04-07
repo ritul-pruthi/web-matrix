@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { Star, StarHalf, ArrowLeft, Edit3 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { supabase } from '../supabase-client';
+import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
 
 function StarRating({ stars, half }) {

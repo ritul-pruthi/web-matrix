@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Eye, EyeOff } from 'lucide-react';
-import { supabase } from '../supabase-client';
+import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
 
 export default function Auth() {

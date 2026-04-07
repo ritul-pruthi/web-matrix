@@ -1,57 +1,29 @@
-import { Navigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useEffect, useState } from 'react';
 
 export default function ProtectedRoute({ children, requireAdmin = false }) {
-  const { user, isAdmin, signOut } = useAuth();
+  const { user, isAdmin, loading } = useAuth();
+  const navigate = useNavigate();
+  const [notAuth, setNotAuth] = useState(false);
 
-  if (!user) {
-    return <Navigate to="/login" replace />;
+  useEffect(() => {
+    if (!loading) {
+      if (!user) {
+        navigate('/login', { replace: true });
+      } else if (requireAdmin && !isAdmin) {
+        alert("Access denied.");
+        navigate('/', { replace: true });
+      }
+    }
+  }, [user, isAdmin, loading, navigate, requireAdmin]);
+
+  if (loading) {
+    return <div style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'var(--color-bg)' }}>Loading...</div>;
   }
 
-  if (requireAdmin && !isAdmin) {
-    return (
-      <div style={{ 
-        minHeight: '100vh', 
-        display: 'flex', 
-        alignItems: 'center', 
-        justifyContent: 'center', 
-        backgroundColor: 'var(--color-bg)', 
-        color: 'white',
-        flexDirection: 'column',
-        gap: '1.5rem',
-        padding: '1rem'
-      }}>
-        <div className="glass card--hover-glow" style={{ padding: '2.5rem', borderRadius: '1rem', textAlign: 'center', maxWidth: '400px' }}>
-          <h2 style={{ fontFamily: 'var(--font-heading)', color: 'var(--color-accent-secondary)', marginBottom: '1rem' }}>Access Denied</h2>
-          <p style={{ color: 'rgba(255,255,255,0.8)', marginBottom: '2rem' }}>You do not have administrator privileges to view this page.</p>
-          <button 
-            className="btn-glow" 
-            onClick={signOut} 
-            style={{ 
-              padding: '0.75rem 1.5rem', 
-              borderRadius: '0.5rem', 
-              border: '1px solid var(--color-accent-secondary)', 
-              backgroundColor: 'transparent', 
-              color: 'var(--color-accent-secondary)',
-              cursor: 'pointer',
-              fontFamily: 'var(--font-heading)',
-              fontWeight: 'bold',
-              transition: 'all 0.3s ease'
-            }}
-            onMouseOver={(e) => {
-              e.target.style.backgroundColor = 'var(--color-accent-secondary)';
-              e.target.style.color = 'var(--color-bg)';
-            }}
-            onMouseOut={(e) => {
-              e.target.style.backgroundColor = 'transparent';
-              e.target.style.color = 'var(--color-accent-secondary)';
-            }}
-          >
-            Sign Out
-          </button>
-        </div>
-      </div>
-    );
+  if (!user || (requireAdmin && !isAdmin)) {
+    return null;
   }
 
   return children;

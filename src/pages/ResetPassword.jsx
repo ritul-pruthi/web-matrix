@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Eye, EyeOff } from 'lucide-react';
-import { supabase } from '../supabase-client';
+import { supabase } from '../lib/supabase';
 
 export default function ResetPassword() {
   const [newPassword, setNewPassword] = useState('');

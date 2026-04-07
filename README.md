@@ -1,28 +1,31 @@
 # 💠 WebMatrix Solution — Digital Success Studio
 
-**WebMatrix Solution** is a modern, high-performance landing page designed for a digital services agency. This project focuses on a "Cyber-Fresh" aesthetic, combining deep obsidian tones with vibrant Emerald and Cyan accents to create a premium, high-tech user experience.
+**WebMatrix Solution** is a modern, high-performance landing page and digital services agency platform built on React, Vite, and Supabase. The project focuses on a "Cyber-Fresh" aesthetic, combining deep obsidian tones with vibrant Emerald and Cyan accents to create a premium, high-tech user experience.
 
-## 🚀 [Launch Live Demo](https://web-matrix-eight.vercel.app/)---
+## 🚀 [Launch Live Demo](https://web-matrix-eight.vercel.app/)
+
+---
 
 ## 🚀 Features
 
 * **Aesthetic UI/UX:** A "Cyber-obsidian" dark mode theme with glassmorphism effects and neon glow accents.
-* **3D Hero Section:** Integrated with **DotLottie** for high-fidelity, vector-based animations that are lightweight and performant.
-* **Responsive Grid:** A fluid service matrix built with **CSS Grid** that seamlessly adapts from 4K monitors to mobile devices.
-* **Interactive Motion:** * Sticky glassmorphism navigation.
-    * Scroll-reveal animations using the **Intersection Observer API**.
-    * Dynamic hover states with lifting cards and glowing borders.
-* **Modern Typography:** Utilizing *Space Grotesk* for high-impact headings and *Inter* for maximum readability.
+* **3D Hero Section:** Integrated with **DotLottie** for high-fidelity animations.
+* **Responsive Grid:** A fluid service matrix seamlessly adapting from 4K to mobile.
+* **Full-Stack CMS Capabilities:**
+  * Protected internal routing & dashboard for administrators.
+  * Real-time client inquiries and user role-management through Supabase.
+  * Interactive review system mapped to authenticated sessions.
+* **Interactive Motion:** Sticky navigation, scroll-reveal animations, lifting cards.
 
 ---
 
 ## 🛠️ Tech Stack
 
-* **HTML5:** Semantic structure for SEO and accessibility.
-* **CSS3:** Custom design system using CSS Variables, Flexbox, and Grid.
-* **JavaScript (Vanilla):** Light-weight interaction logic without the overhead of heavy frameworks.
-* **DotLottie:** Next-gen animation format for the hero visual.
-* **Lucide Icons:** Clean, consistent vector iconography.
+* **Frontend:** React, Vite
+* **Backend:** Supabase (Auth, Database, Edge Functions)
+* **Styling:** Custom CSS Variables + Flexbox/Grid
+* **Icons & Assets:** Lucide React, DotLottie-React
+* **Routing:** React Router v6
 
 ---
 
@@ -30,8 +33,49 @@
 
 ```text
 .
-├── index.html          # Main entry point and layout
-├── style.css           # Design system and "Aesthetic Tech" styles
-├── script.js           # Interaction and animation logic
-├── hero-animation.lottie # 3D Hero asset
-└── README.md           # Documentation (You are here!)
+├── src/
+│   ├── components/      # Reusable UI React Components (Forms, Layout, Dashboards)
+│   ├── context/         # Global App State (AuthContext, etc.)
+│   ├── hooks/           # Custom React Hooks (useReviews, etc.)
+│   ├── lib/             # Third-party singletons (supabase.js)
+│   ├── pages/           # Next-level views tied to routing (LandingPage, Auth, Dashboard/)
+│   ├── App.jsx          # Router configurations & layout composition
+│   └── index.css        # CSS definitions & "Cyber-Fresh" themes
+├── public/              # Global raw assets
+├── supabase/            # Local DB definitions & SQL Migrations
+├── .env.example         # Template for environment keys
+├── index.html           # Main Vite entry point
+└── package.json         # Node configurations & package scripts
+```
+
+---
+
+## ⚙️ Local Development Setup
+
+To get you up and running locally, follow these steps:
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/ritul-pruthi/web-matrix.git
+   cd web-matrix
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Configure Environment variables**
+   ```bash
+   cp .env.example .env.local
+   ```
+   *Edit `.env.local` to fill out your keys:*
+   ```text
+   VITE_SUPABASE_URL=YOUR_SUPABASE_PROJECT_URL
+   VITE_SUPABASE_ANON_KEY=YOUR_SUPABASE_ANON_KEY
+   ```
+
+4. **Run the development server**
+   ```bash
+   npm run dev
+   ```

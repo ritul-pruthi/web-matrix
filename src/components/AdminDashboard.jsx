@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Home, Flag, Trash2 } from 'lucide-react';
-import { supabase } from '../supabase-client';
+import { supabase } from '../lib/supabase';
 
 export default function AdminDashboard() {
   const navigate = useNavigate();

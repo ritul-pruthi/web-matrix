@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, User, Mail, Camera, Save, CheckCircle, AlertCircle, Loader } from 'lucide-react';
-import { supabase } from '../supabase-client';
+import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
 
 export default function Settings() {
